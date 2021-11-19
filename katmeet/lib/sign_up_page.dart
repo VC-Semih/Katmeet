@@ -72,6 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
           readOnly: true,
           controller: _dateController,
           decoration: const InputDecoration(
+          icon: Icon(Icons.date_range),
           labelText: 'Date',
         ),
         onTap: () async {

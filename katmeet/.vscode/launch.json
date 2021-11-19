@@ -20,7 +20,8 @@
             "name": "katmeet (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
         }
     ]
+
 }
