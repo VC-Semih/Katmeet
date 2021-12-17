@@ -1,16 +1,32 @@
-# katmeet
+# Katmeet how to setup
 
-A new Flutter project.
+First launch
 
-## Getting Started
+```bash
+$ npm i -g @aws-amplify/cli
+$ amplify configure (if you never used amplify only)
+$ amplify init
+$ amplify push
+$ flutter pub get
+$ flutter run
+```
 
-This project is a starting point for a Flutter application.
+If aws is already online
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+$ npm i -g @aws-amplify/cli
+$ amplify init
+$ amplify pull
+$ flutter pub get
+$ flutter run
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+> Ensure you have an emulator running or device attached before running `flutter run`.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Resources:
+
+- [Amplify Flutter Documentation](https://docs.amplify.aws/lib/project-setup/prereq/q/platform/flutter)
+- [Beginner's Guide to Futures](https://medium.com/flutter-community/a-guide-to-using-futures-in-flutter-for-beginners-ebeddfbfb967)
+- [Amplify Flutter on Pub.dev](https://pub.dev/publishers/aws-amplify.com/packages)
+- [Using the Camera](https://flutter.dev/docs/cookbook/plugins/picture-using-camera#complete-example)
+- [online documentation](https://flutter.dev/docs)

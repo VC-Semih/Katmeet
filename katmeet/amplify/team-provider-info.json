@@ -1,15 +1,20 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-katmeet-dev-152325-authRole",
-      "UnauthRoleArn": "arn:aws:iam::579561017954:role/amplify-katmeet-dev-152325-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::579561017954:role/amplify-katmeet-dev-152325-authRole",
+      "AuthRoleName": "amplify-katmeet-dev-210837-authRole",
+      "UnauthRoleArn": "arn:aws:iam::579561017954:role/amplify-katmeet-dev-210837-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::579561017954:role/amplify-katmeet-dev-210837-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-katmeet-dev-152325-deployment",
-      "UnauthRoleName": "amplify-katmeet-dev-152325-unauthRole",
-      "StackName": "amplify-katmeet-dev-152325",
-      "StackId": "arn:aws:cloudformation:us-east-1:579561017954:stack/amplify-katmeet-dev-152325/452f1500-4944-11ec-bcbe-12ab1d47bf47",
-      "AmplifyAppId": "d22r6jcmcwujdo"
+      "DeploymentBucketName": "amplify-katmeet-dev-210837-deployment",
+      "UnauthRoleName": "amplify-katmeet-dev-210837-unauthRole",
+      "StackName": "amplify-katmeet-dev-210837",
+      "StackId": "arn:aws:cloudformation:us-east-1:579561017954:stack/amplify-katmeet-dev-210837/a188b7a0-5d19-11ec-bdfb-0e0bc9a574ad",
+      "AmplifyAppId": "d1u1y7n8y2hktj"
+    },
+    "categories": {
+      "auth": {
+        "katmeet13ef10e3": {}
+      }
     }
   }
 }

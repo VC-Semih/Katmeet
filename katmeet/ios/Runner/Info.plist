@@ -40,8 +40,13 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<key>NSCameraUsageDescription</key>
-	<string>Need the camera to take pictures.</string>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is required to take photos</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+   		<key>NSAllowsArbitraryLoads</key>
+   		<true/>
+	</dict>
 </dict>
 </plist>
