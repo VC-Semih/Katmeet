@@ -1,99 +1,132 @@
 import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
-import 'package:katmeet/sign_up_page.dart';
-import 'package:katmeet/verification_page.dart';
-
 import 'amplifyconfiguration.dart';
-import 'auth_service.dart';
-import 'camera_flow.dart';
-import 'login_page.dart';
+import 'screens/auth.dart';
+import 'screens/photos.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyAppState());
 }
 
-// 1
-class MyApp extends StatefulWidget {
+class MyAppState extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _MyAppState();
+  State<StatefulWidget> createState() => MyApp();
 }
 
-class _MyAppState extends State<MyApp> {
-  final _amplify = Amplify;
-  final _authService = AuthService();
+class MyApp extends State<MyAppState> {
+  AmplifyAuthCognito auth = AmplifyAuthCognito();
+  AmplifyStorageS3 storage = AmplifyStorageS3();
+  AmplifyAnalyticsPinpoint analytics = AmplifyAnalyticsPinpoint();
+
+  bool configured = false;
+  bool authenticated = false;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
-    _configureAmplify();
-    _authService.showLogin();
+    // Add the Amplify category plugins, plugins should
+    // be added here in order for configuration to work
+    // DO NOT add plugins that you haven't configured via
+    // the Amplify CLI. This will throw a configuration error.
+    Amplify.addPlugins([auth, storage, analytics]);
+
+    // Configure Amplify categories via the amplifyconfiguration.dart
+    // configuration that was generated via the Amplify CLI
+    // to generate an `amplifyconfiguration.dart` file run
+    //
+    // $ npm install -g @aws-amplify/cli@flutter-preview
+    // $ amplify init
+    //
+    // from the terminal and choose "flutter" as the framework
+    Amplify.configure(amplifyconfig).then((value) {
+      print("Amplify Configured");
+      setState(() {
+        configured = true;
+      });
+    }).catchError(print);
   }
 
+  // ignore: slash_for_doc_comments
+  /**
+   * Check the current authentication session
+   * if there is a session active, set the state
+   * to authenticated which will show the `Photos` view
+   * 
+   * Setup HUB listeners for Authentication states. This
+   * will set the state back and forth from authenticated/unauthenticated
+   * views based on the `authenticated` property
+   */
+  Future<void> _checkSession() async {
+    print("Checking Auth Session...");
+    try {
+      var session = await auth.fetchAuthSession();
+      authenticated = session.isSignedIn;
+      // ignore: avoid_catches_without_on_clauses
+    } catch (error) {
+      // if not signed in this should be caught
+      // either way we will setup HUB events
+      print(error);
+    }
+    _setupAuthEvents();
+  }
+
+  void _setupAuthEvents() {
+    Amplify.Hub.listen([HubChannel.Auth], (hubEvent) {
+      switch (hubEvent.eventName) {
+        case "SIGNED_IN":
+          {
+            print("HUB: USER IS SIGNED IN");
+            setState(() {
+              authenticated = true;
+            });
+          }
+          break;
+        case "SIGNED_OUT":
+          {
+            print("HUB: USER IS SIGNED OUT");
+            setState(() {
+              authenticated = false;
+            });
+          }
+          break;
+        case "SESSION_EXPIRED":
+          {
+            print("HUB: USER SESSION EXPIRED");
+            setState(() {
+              authenticated = false;
+            });
+          }
+          break;
+        default:
+          {
+            print("HUB: CONFIGURATION EVENT");
+          }
+      }
+    });
+  }
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Photo Gallery App',
-      theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
-      // 2
-      home: StreamBuilder<AuthState>(
-          stream: _authService.authStateController.stream,
+        title: 'Katmeet',
+        theme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+          accentColor: Colors.grey,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: new FutureBuilder<void>(
+          future: _checkSession(),
           builder: (context, snapshot) {
-            // 3
-            if (snapshot.hasData) {
-              return Navigator(
-                pages: [
-                  // 4
-                  // Show Login Page
-                  if (snapshot.data!.authFlowStatus == AuthFlowStatus.login)
-                    MaterialPage(
-                        child: LoginPage(
-                            didProvideCredentials:
-                                _authService.loginWithCredentials,
-                            shouldShowSignUp: _authService.showSignUp))
-
-                  // 5
-                  // Show Sign Up Page
-                  else if (snapshot.data!.authFlowStatus ==
-                      AuthFlowStatus.signUp)
-                    MaterialPage(
-                        child: SignUpPage(
-                            didProvideCredentials:
-                                _authService.signUpWithCredentials,
-                            shouldShowLogin: _authService.showLogin))
-
-                  // Show Verification Code Page
-                  else if (snapshot.data!.authFlowStatus ==
-                      AuthFlowStatus.verification)
-                    MaterialPage(
-                        child: VerificationPage(
-                            didProvideVerificationCode:
-                                _authService.verifyCode))
-                  // Show Camera Flow
-                  else if (snapshot.data!.authFlowStatus ==
-                      AuthFlowStatus.session)
-                    MaterialPage(
-                        child: CameraFlow(shouldLogOut: _authService.logOut))
-                ],
-                onPopPage: (route, result) => route.didPop(result),
-              );
+            if (snapshot.connectionState == ConnectionState.done) {
+              return authenticated ? Photos(auth: auth) : Authenticator();
             } else {
-              // 6
-              return Container(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
+              return Center(child: CircularProgressIndicator());
             }
-          }),
-    );
-  }
-
-  void _configureAmplify() async {
-    try {
-      await _amplify.configure(amplifyconfig);
-      print('Successfully configured Amplify 🎉');
-    } catch (e) {
-      print(e);
-      print('Could not configure Amplify ☠️');
-    }
+          },
+        ));
   }
 }
