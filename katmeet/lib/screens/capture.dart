@@ -128,6 +128,14 @@ class DisplayPictureScreen extends StatelessWidget {
             File local = File(imagePath);
             Amplify.Storage.uploadFile(key: key, local: local, options: options)
                 .then((UploadFileResult result) {
+              Amplify.Auth.fetchUserAttributes().then((value) {
+                value.forEach((element) {
+                  if(element.userAttributeKey.toString() == "email"){
+                    print('email found ! It is : ${element.value}');
+                  }
+                  print('key: ${element.userAttributeKey}; value: ${element.value}');
+                });
+              });
               print("file uploaded");
               print(result.key);
               Navigator.pop(context);
