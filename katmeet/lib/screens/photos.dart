@@ -22,7 +22,6 @@ class Photos extends StatefulWidget {
 
 class PhotosState extends State<Photos> {
   final StorageService _storageService;
-
   PhotosState(this._storageService);
   dynamic _openCameraView(BuildContext context) async {
     try {
