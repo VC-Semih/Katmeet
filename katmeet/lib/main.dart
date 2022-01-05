@@ -1,8 +1,11 @@
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
+import 'package:katmeet/models/ModelProvider.dart';
 import 'amplifyconfiguration.dart';
 import 'screens/auth.dart';
 import 'screens/photos.dart';
@@ -20,6 +23,8 @@ class MyApp extends State<MyAppState> {
   AmplifyAuthCognito auth = AmplifyAuthCognito();
   AmplifyStorageS3 storage = AmplifyStorageS3();
   AmplifyAnalyticsPinpoint analytics = AmplifyAnalyticsPinpoint();
+  AmplifyDataStore dataStore = AmplifyDataStore(modelProvider: ModelProvider.instance);
+  AmplifyAPI api = AmplifyAPI();
 
   bool configured = false;
   bool authenticated = false;
@@ -27,20 +32,8 @@ class MyApp extends State<MyAppState> {
   @override
   initState() {
     super.initState();
-    // Add the Amplify category plugins, plugins should
-    // be added here in order for configuration to work
-    // DO NOT add plugins that you haven't configured via
-    // the Amplify CLI. This will throw a configuration error.
-    Amplify.addPlugins([auth, storage, analytics]);
 
-    // Configure Amplify categories via the amplifyconfiguration.dart
-    // configuration that was generated via the Amplify CLI
-    // to generate an `amplifyconfiguration.dart` file run
-    //
-    // $ npm install -g @aws-amplify/cli@flutter-preview
-    // $ amplify init
-    //
-    // from the terminal and choose "flutter" as the framework
+    Amplify.addPlugins([auth, storage, analytics, dataStore, api]);
     Amplify.configure(amplifyconfig).then((value) {
       print("Amplify Configured");
       setState(() {
@@ -49,16 +42,13 @@ class MyApp extends State<MyAppState> {
     }).catchError(print);
   }
 
-  // ignore: slash_for_doc_comments
-  /**
-   * Check the current authentication session
-   * if there is a session active, set the state
-   * to authenticated which will show the `Photos` view
-   * 
-   * Setup HUB listeners for Authentication states. This
-   * will set the state back and forth from authenticated/unauthenticated
-   * views based on the `authenticated` property
-   */
+  /// Check the current authentication session
+  /// if there is a session active, set the state
+  /// to authenticated which will show the `Photos` view
+  ///
+  /// Setup HUB listeners for Authentication states. This
+  /// will set the state back and forth from authenticated/unauthenticated
+  /// views based on the `authenticated` property
   Future<void> _checkSession() async {
     print("Checking Auth Session...");
     try {

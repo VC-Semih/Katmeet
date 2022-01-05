@@ -1,0 +1,13 @@
+type PhotosModel @model @auth(rules: [{allow: public}]) @key(name: "byUserModel", fields: ["usermodelID"]) {
+  id: ID!
+  s3key: String
+  usermodelID: ID
+}
+
+type UserModel @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  username: String!
+  email: String!
+  PhotosModels: [PhotosModel] @connection(keyName: "byUserModel", fields: ["id"])
+}
+ 

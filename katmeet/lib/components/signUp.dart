@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:katmeet/models/ModelProvider.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);
@@ -52,6 +53,10 @@ class SignUpState extends State<SignUp> {
       await Amplify.Auth.confirmSignUp(
           username: _usernameController.text.trim(),
           confirmationCode: _confirmController.text.trim());
+      final user = UserModel(
+          username: _usernameController.text.trim(),
+          email: _emailController.text.trim());
+      await Amplify.DataStore.save(user);
       Scaffold.of(context).hideCurrentSnackBar();
       Scaffold.of(context).showSnackBar(
           SnackBar(content: Text('Confirmed, you can now login.')));
