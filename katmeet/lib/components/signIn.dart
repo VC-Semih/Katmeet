@@ -4,6 +4,9 @@ import 'package:amplify_flutter/amplify.dart';
 
 import 'dart:developer' as dev;
 
+import '../auth_repository.dart';
+import '../user_repository.dart';
+
 class SignIn extends StatefulWidget {
   SignIn({Key key}) : super(key: key);
 
@@ -27,6 +30,14 @@ class SignInState extends State<SignIn> {
           password: _passwordController.text.trim());
       dev.log('Sign In Result: ' + res.toString(),
           name: 'com.amazonaws.amplify');
+      String uid = await AuthRepository.attemptAutoLogin();
+      String username = await AuthRepository.getUsernameFromAttributes();
+      String email = await AuthRepository.getEmailFromAttributes();
+      UserRepository.createUser(
+          userId: uid,
+          username: username,
+          email: email
+      );
     } on AuthException catch (e) {
       print(e.message);
       Scaffold.of(context).hideCurrentSnackBar();
