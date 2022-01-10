@@ -5,6 +5,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:katmeet/auth_repository.dart';
+import 'package:katmeet/models/ModelProvider.dart';
+import 'package:katmeet/photo_repository.dart';
+import 'package:katmeet/user_repository.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class Capture extends StatefulWidget {
@@ -126,15 +130,13 @@ class DisplayPictureScreen extends StatelessWidget {
               S3UploadFileOptions(accessLevel: StorageAccessLevel.protected);
           try {
             File local = File(imagePath);
-            Amplify.Storage.uploadFile(key: key, local: local, options: options)
-                .then((UploadFileResult result) {
-              Amplify.Auth.fetchUserAttributes().then((value) {
-                value.forEach((element) {
-                  if(element.userAttributeKey.toString() == "email"){
-                    print('email found ! It is : ${element.value}');
-                  }
-                  print('key: ${element.userAttributeKey}; value: ${element.value}');
-                });
+            Amplify.Storage.uploadFile(key: key, local: local, options: options).then((UploadFileResult result) {
+              AuthRepository.getEmailFromAttributes().then((String email) => {
+                    UserRepository.getUserByEmail(email).then((UserModel userObject) => {
+                          PhotoRepository.createPhoto(s3Key: result.key, userID: userObject.id).then((PhotosModel photoObject) => {
+                            print(photoObject)
+                          })
+                    })
               });
               print("file uploaded");
               print(result.key);
