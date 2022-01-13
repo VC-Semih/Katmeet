@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
-import 'package:katmeet/auth_repository.dart';
-import 'package:katmeet/user_repository.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key key}) : super(key: key);

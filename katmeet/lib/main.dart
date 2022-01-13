@@ -42,13 +42,6 @@ class MyApp extends State<MyAppState> {
     }).catchError(print);
   }
 
-  /// Check the current authentication session
-  /// if there is a session active, set the state
-  /// to authenticated which will show the `Photos` view
-  ///
-  /// Setup HUB listeners for Authentication states. This
-  /// will set the state back and forth from authenticated/unauthenticated
-  /// views based on the `authenticated` property
   Future<void> _checkSession() async {
     print("Checking Auth Session...");
     try {
