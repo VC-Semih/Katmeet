@@ -48,12 +48,12 @@ class ForgotPasswordState extends State<ForgotPassword> {
       });
       Scaffold.of(context).hideCurrentSnackBar();
       Scaffold.of(context).showSnackBar(
-          SnackBar(content: Text("Your password has been reset.")));
+          SnackBar(content: Text("Votre mot de passe a été réinitialisé.")));
     } on AuthException catch (e) {
       print(e.message);
       Scaffold.of(context).hideCurrentSnackBar();
       Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text("Reset failed, please check your confirmation code.")));
+          content: Text("Échec de la réinitialisation, veuillez vérifier votre code de confirmation.")));
     }
   }
 
