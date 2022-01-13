@@ -31,23 +31,23 @@ class ModelProvider implements ModelProviderInterface {
 
   @override
   ModelType<Model> getModelTypeByModelName(String modelName) {
-      switch (modelName) {
-        case "UserModel":
-          {
-            return UserModel.classType;
-          }
-          break;
-        case "PhotosModel":
-          {
-            return PhotosModel.classType;
-          }
-          break;
-        default:
-          {
-            throw Exception(
-                "Failed to find model in model provider for model name: " +
-                    modelName);
-          }
-      }
+    switch (modelName) {
+      case "UserModel":
+        {
+          return UserModel.classType;
+        }
+        break;
+      case "PhotosModel":
+        {
+          return PhotosModel.classType;
+        }
+        break;
+      default:
+        {
+          throw Exception(
+              "Failed to find model in model provider for model name: " +
+                  modelName);
+        }
+    }
   }
 }
