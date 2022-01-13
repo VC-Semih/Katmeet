@@ -31,7 +31,7 @@ class SignInState extends State<SignIn> {
       dev.log('Sign In Result: ' + res.toString(),
           name: 'com.amazonaws.amplify');
       String uid = await AuthRepository.attemptAutoLogin();
-      String username = await AuthRepository.getUsernameFromAttributes();
+      String username = _usernameController.text.trim();
       String email = await AuthRepository.getEmailFromAttributes();
       UserRepository.createUser(
           userId: uid,

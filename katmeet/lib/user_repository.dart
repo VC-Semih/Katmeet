@@ -28,6 +28,18 @@ class UserRepository {
     }
   }
 
+  static Future<UserModel> getUserByEmail(String email) async{
+    try {
+      final users = await Amplify.DataStore.query(
+        UserModel.classType,
+        where: UserModel.EMAIL.eq(email),
+      );
+      return users.isNotEmpty ? users.first : null;
+    } on Exception catch (e) {
+      throw e;
+    }
+  }
+
   static Future<UserModel> createUser(
       {String userId, String username, String email}) async {
     final newUser = UserModel(id: userId, username: username, email: email);

@@ -26,18 +26,6 @@ class AuthRepository {
     }
   }
 
-  static Future<String> getUsernameFromAttributes() async {
-    try {
-      final attributes = await Amplify.Auth.fetchUserAttributes();
-      final userId = attributes
-          .firstWhere((element) => element.userAttributeKey == 'email')
-          .value;
-      return userId;
-    } on Exception catch (e) {
-      throw e;
-    }
-  }
-
   static Future<String> attemptAutoLogin() async {
     try {
       final session = await Amplify.Auth.fetchAuthSession();
