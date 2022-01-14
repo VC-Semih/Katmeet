@@ -88,7 +88,12 @@ class SignUpState extends State<SignUp> {
                         TextFormField(
                           controller: _confirmController,
                           decoration: InputDecoration(
-                              hintText: "Enter confirmation code"),
+                              filled: true,
+                              fillColor: Colors.blue.shade100,
+                              border: OutlineInputBorder(),
+                              labelText: 'Enter confirmation code',
+                              hintText: 'Confirmeow',
+                              icon: Icon(Icons.star)),
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter confirmation code';
@@ -139,7 +144,13 @@ class SignUpState extends State<SignUp> {
                       TextFormField(
                         controller: _usernameController,
                         decoration:
-                            InputDecoration(hintText: "Enter a Username"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter a Username',
+                                hintText: 'SnowFlake',
+                                icon: Icon(Icons.star)),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter a Username';
@@ -150,7 +161,13 @@ class SignUpState extends State<SignUp> {
                       TextFormField(
                         controller: _emailController,
                         decoration:
-                            InputDecoration(hintText: "Enter your Email"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter your Email',
+                                hintText: 'SnowFlake@katmeet.com',
+                                icon: Icon(Icons.star)),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter an Email Address';
@@ -161,7 +178,13 @@ class SignUpState extends State<SignUp> {
                       TextFormField(
                         controller: _passwordController,
                         decoration:
-                            InputDecoration(hintText: "Enter a Password"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter a Password',
+                                hintText: '123-456',
+                                icon: Icon(Icons.star)),
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -173,7 +196,13 @@ class SignUpState extends State<SignUp> {
                       TextFormField(
                         controller: _verifyPasswordController,
                         decoration:
-                            InputDecoration(hintText: "Verify Password"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Verify Password',
+                                hintText: '123-456',
+                                icon: Icon(Icons.star)),
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {

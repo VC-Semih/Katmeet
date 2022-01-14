@@ -61,7 +61,14 @@ class SignInState extends State<SignIn> {
                 ),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: InputDecoration(hintText: "Enter a Username"),
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.blue.shade100,
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter a Username',
+                      hintText: 'SnowFlake',
+                      icon: Icon(Icons.star)
+                  ),
                   // The validator receives the text that the user has entered.
                   validator: (value) {
                     if (value.isEmpty) {
@@ -72,7 +79,14 @@ class SignInState extends State<SignIn> {
                 ),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: InputDecoration(hintText: "Enter a Password"),
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.blue.shade100,
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter a Password',
+                      hintText: 'Meow',
+                      icon: Icon(Icons.star)
+                  ),
                   obscureText: true,
                   // The validator receives the text that the user has entered.
                   validator: (value) {
