@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:katmeet/functions/storage_service.dart';
+import 'package:katmeet/screens/Profile.dart';
 
 
 import 'capture.dart';
@@ -63,11 +64,23 @@ class PhotosState extends State<Photos> {
         appBar: AppBar(
           title: Text("Photos"),
           actions: [
-            IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  widget.auth.signOut(request: null);
-                })
+            PopupMenuButton(
+              onSelected: (item) => onSelected(context,item),
+                itemBuilder: (context) => [
+                  PopupMenuItem<int>(
+                    value: 0,
+                    child: Text('Profile'),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child:Text('Logout'),
+                    onTap: (){
+                      widget.auth.signOut(request: null);
+                    },
+                  ),
+
+                ]
+            ),
           ],
           leading: Padding(
               padding: EdgeInsets.fromLTRB(15, 5, 0, 5),
@@ -76,7 +89,17 @@ class PhotosState extends State<Photos> {
       body: Container(child: _galleryGrid())
     );
   }
+  void onSelected(BuildContext context, int item){
 
+    switch(item){
+      case 0:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => Profile()),
+        );
+        break;
+
+    }
+  }
     Widget _galleryGrid() {
       return StreamBuilder(
           // Le générateur StreamBuilder va utiliser le contrôleur imageUrlsController qui sera transmis du service StorageService pour fournir des instantanés de nos données.
