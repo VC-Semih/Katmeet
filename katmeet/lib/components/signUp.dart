@@ -92,6 +92,7 @@ class SignUpState extends State<SignUp> {
                               fillColor: Colors.blue.shade100,
                               border: OutlineInputBorder(),
                               labelText: 'Enter confirmation code',
+                              contentPadding: new EdgeInsets.only(bottom: 1.0),
                               hintText: 'Confirmeow',
                               icon: Icon(Icons.star)),
                           validator: (value) {
@@ -131,8 +132,10 @@ class SignUpState extends State<SignUp> {
                             )),
                       ],
                     )),
+                SizedBox(height: 30.0),
                 Visibility(
                   visible: !_isSignedUp,
+
                   child: Column(
                     children: [
                       Padding(
@@ -141,6 +144,7 @@ class SignUpState extends State<SignUp> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 24)),
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _usernameController,
                         decoration:
@@ -158,6 +162,7 @@ class SignUpState extends State<SignUp> {
                           return null;
                         },
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _emailController,
                         decoration:
@@ -175,6 +180,7 @@ class SignUpState extends State<SignUp> {
                           return null;
                         },
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _passwordController,
                         decoration:
@@ -193,6 +199,7 @@ class SignUpState extends State<SignUp> {
                           return null;
                         },
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _verifyPasswordController,
                         decoration:
@@ -215,20 +222,17 @@ class SignUpState extends State<SignUp> {
                           }
                         },
                       ),
-                      ConstrainedBox(
-                          constraints:
-                              const BoxConstraints(minWidth: double.infinity),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: RaisedButton(
+                      SizedBox(height: 30.0),
+                      ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   _signUp();
                                 }
                               },
                               child: Text('SIGN UP'),
-                            ),
-                          )),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
+                      ),
+                              
                       ConstrainedBox(
                           constraints:
                               const BoxConstraints(minWidth: double.infinity),

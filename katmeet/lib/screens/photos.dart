@@ -100,36 +100,37 @@ class PhotosState extends State<Photos> {
 
     }
   }
-    Widget _galleryGrid() {
-      return StreamBuilder(
-          // Le générateur StreamBuilder va utiliser le contrôleur imageUrlsController qui sera transmis du service StorageService pour fournir des instantanés de nos données.
-          stream:  _storageService.imageUrlsController.stream,
-          builder: (context, snapshot) {
-            // L'interface utilisateur exige que l'instantané possède des données afin d'afficher quelque chose de pertinent à l'utilisateur.
-            if (snapshot.hasData) {
-              // Nous devons également déterminer si les données possèdent effectivement des éléments. Dans l'affirmative, nous poursuivons la génération de la vue GridView.
-              if (snapshot.data.length != 0) {
-                return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
-                    // Au lieu d'utiliser un chiffre codé en dur, nous pouvons maintenant faire en sorte que la taille de notre vue GridView soit basée sur la longueur des données de notre instantané.
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: snapshot.data[index],
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator()),
-                      );
-                    });
-              } else {
-                // Si l'instantané ne comporte aucun élément, nous afficherons un texte indiquant qu'il n'y a rien à afficher.
-                return Center(child: Text('No images to display.'));
-              }
+  Widget _galleryGrid() {
+    return StreamBuilder(
+      // Le générateur StreamBuilder va utiliser le contrôleur imageUrlsController qui sera transmis du service StorageService pour fournir des instantanés de nos données.
+        stream: _storageService.imageUrlsController.stream,
+        builder: (context, snapshot) {
+          // L'interface utilisateur exige que l'instantané possède des données afin d'afficher quelque chose de pertinent à l'utilisateur.
+          if (snapshot.hasData) {
+            // Nous devons également déterminer si les données possèdent effectivement des éléments. Dans l'affirmative, nous poursuivons la génération de la vue GridView.
+            if (snapshot.data.length != 0) {
+              return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  // Au lieu d'utiliser un chiffre codé en dur, nous pouvons maintenant faire en sorte que la taille de notre vue GridView soit basée sur la longueur des données de notre instantané.
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return CachedNetworkImage(
+                      imageUrl: snapshot.data[index],
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          Container(
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator()),
+                    );
+                  });
             } else {
-              return Center(child: CircularProgressIndicator());
+              // Si l'instantané ne comporte aucun élément, nous afficherons un texte indiquant qu'il n'y a rien à afficher.
+              return Center(child: Text('No images to display.'));
             }
-          });
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 }
