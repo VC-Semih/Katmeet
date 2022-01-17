@@ -59,6 +59,7 @@ class SignInState extends State<SignIn> {
                       style:
                           TextStyle(fontWeight: FontWeight.w400, fontSize: 24)),
                 ),
+                SizedBox(height: 10.0),
                 TextFormField(
                   controller: _usernameController,
                   decoration: InputDecoration(
@@ -77,6 +78,7 @@ class SignInState extends State<SignIn> {
                     return null;
                   },
                 ),
+                SizedBox(height: 10.0),
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -84,7 +86,7 @@ class SignInState extends State<SignIn> {
                       fillColor: Colors.blue.shade100,
                       border: OutlineInputBorder(),
                       labelText: 'Enter a Password',
-                      hintText: 'Meow',
+                      hintText: '123-456-78',
                       icon: Icon(Icons.star)
                   ),
                   obscureText: true,
@@ -96,20 +98,16 @@ class SignInState extends State<SignIn> {
                     return null;
                   },
                 ),
-                ConstrainedBox(
-                    constraints:
-                        const BoxConstraints(minWidth: double.infinity),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: RaisedButton(
+                SizedBox(height: 30.0),
+                ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             _signIn();
                           }
                         },
                         child: Text('SIGN IN'),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                       ),
-                    )),
               ],
             )));
   }

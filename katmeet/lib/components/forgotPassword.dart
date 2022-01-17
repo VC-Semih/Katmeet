@@ -131,10 +131,12 @@ class ForgotPasswordState extends State<ForgotPassword> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 24)),
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _usernameController,
                         decoration:
-                            InputDecoration(filled: true,
+                            InputDecoration(
+                                filled: true,
                                 fillColor: Colors.blue.shade100,
                                 border: OutlineInputBorder(),
                                 labelText: 'Enter your Username',
@@ -148,20 +150,17 @@ class ForgotPasswordState extends State<ForgotPassword> {
                           return null;
                         },
                       ),
-                      ConstrainedBox(
-                          constraints:
-                              const BoxConstraints(minWidth: double.infinity),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: RaisedButton(
+                      SizedBox(height: 25.0),
+                      ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   _forgotPass();
                                 }
                               },
                               child: Text('SUBMIT'),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                             ),
-                          )),
+
                     ]))
               ],
             )));

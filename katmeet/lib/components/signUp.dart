@@ -85,6 +85,7 @@ class SignUpState extends State<SignUp> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 24)),
                         ),
+                        SizedBox(height: 10.0),
                         TextFormField(
                           controller: _confirmController,
                           decoration: InputDecoration(
@@ -92,7 +93,6 @@ class SignUpState extends State<SignUp> {
                               fillColor: Colors.blue.shade100,
                               border: OutlineInputBorder(),
                               labelText: 'Enter confirmation code',
-                              contentPadding: new EdgeInsets.only(bottom: 1.0),
                               hintText: 'Confirmeow',
                               icon: Icon(Icons.star)),
                           validator: (value) {
@@ -102,34 +102,27 @@ class SignUpState extends State<SignUp> {
                             return null;
                           },
                         ),
-                        ConstrainedBox(
-                            constraints:
-                                const BoxConstraints(minWidth: double.infinity),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: RaisedButton(
+                        SizedBox(height: 25.0),
+                        ElevatedButton(
                                 onPressed: () {
                                   if (_formKey.currentState.validate()) {
                                     _confirm();
                                   }
                                 },
                                 child: Text('CONFIRM ACCOUNT'),
-                              ),
-                            )),
-                        ConstrainedBox(
-                            constraints:
-                                const BoxConstraints(minWidth: double.infinity),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: FlatButton(
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
+
+                        ),
+
+                        ElevatedButton(
                                 onPressed: () {
                                   setState(() {
                                     _isSignedUp = false;
                                   });
                                 },
                                 child: Text('CANCEL'),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                               ),
-                            )),
                       ],
                     )),
                 SizedBox(height: 30.0),
@@ -189,7 +182,7 @@ class SignUpState extends State<SignUp> {
                                 fillColor: Colors.blue.shade100,
                                 border: OutlineInputBorder(),
                                 labelText: 'Enter a Password',
-                                hintText: '123-456',
+                                hintText: '123-456-78',
                                 icon: Icon(Icons.star)),
                         obscureText: true,
                         validator: (value) {
@@ -208,7 +201,7 @@ class SignUpState extends State<SignUp> {
                                 fillColor: Colors.blue.shade100,
                                 border: OutlineInputBorder(),
                                 labelText: 'Verify Password',
-                                hintText: '123-456',
+                                hintText: '123-456-78',
                                 icon: Icon(Icons.star)),
                         obscureText: true,
                         validator: (value) {
@@ -233,20 +226,16 @@ class SignUpState extends State<SignUp> {
                         style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                       ),
                               
-                      ConstrainedBox(
-                          constraints:
-                              const BoxConstraints(minWidth: double.infinity),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: FlatButton(
+                      ElevatedButton(
                               onPressed: () {
                                 setState(() {
                                   _isSignedUp = true;
                                 });
                               },
                               child: Text('CONFIRM ACCOUNT'),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                             ),
-                          )),
+
                     ],
                   ),
                 )
