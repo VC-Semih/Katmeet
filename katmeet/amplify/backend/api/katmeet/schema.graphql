@@ -10,4 +10,4 @@ type UserModel @model @auth(rules: [{allow: public}]) {
   email: String!
   PhotosModels: [PhotosModel] @connection(keyName: "byUserModel", fields: ["id"])
 }
- 
+  
