@@ -59,9 +59,17 @@ class SignInState extends State<SignIn> {
                       style:
                           TextStyle(fontWeight: FontWeight.w400, fontSize: 24)),
                 ),
+                SizedBox(height: 10.0),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: InputDecoration(hintText: "Enter a Username"),
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.blue.shade100,
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter a Username',
+                      hintText: 'SnowFlake',
+                      icon: Icon(Icons.star)
+                  ),
                   // The validator receives the text that the user has entered.
                   validator: (value) {
                     if (value.isEmpty) {
@@ -70,9 +78,17 @@ class SignInState extends State<SignIn> {
                     return null;
                   },
                 ),
+                SizedBox(height: 10.0),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: InputDecoration(hintText: "Enter a Password"),
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.blue.shade100,
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter a Password',
+                      hintText: '123-456-78',
+                      icon: Icon(Icons.star)
+                  ),
                   obscureText: true,
                   // The validator receives the text that the user has entered.
                   validator: (value) {
@@ -82,20 +98,16 @@ class SignInState extends State<SignIn> {
                     return null;
                   },
                 ),
-                ConstrainedBox(
-                    constraints:
-                        const BoxConstraints(minWidth: double.infinity),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: RaisedButton(
+                SizedBox(height: 30.0),
+                ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             _signIn();
                           }
                         },
                         child: Text('SIGN IN'),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                       ),
-                    )),
               ],
             )));
   }

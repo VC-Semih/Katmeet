@@ -271,7 +271,6 @@ Resources:
                     Ref: AWS::AccountId
                   lambda:
                     Ref: UserPoolClientLambda
-
     DependsOn: UserPoolClientLambdaPolicy
   UserPoolClientInputs:
     Type: Custom::LambdaCallout
