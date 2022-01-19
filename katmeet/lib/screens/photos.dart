@@ -70,7 +70,7 @@ class PhotosState extends State<Photos> {
           child: Icon(Icons.add_a_photo),
         ),
         appBar: AppBar(
-          title: Text("Photos"),
+          title: Text("My photos"),
           actions: [
             PopupMenuButton(
                 onSelected: (item) => onSelected(context, item),
