@@ -53,7 +53,7 @@ class PhotosState extends State<Photos> {
   Future loadList() async {
     _storageService.getImages();
     S3ListOptions options =
-    S3ListOptions(accessLevel: StorageAccessLevel.protected);
+        S3ListOptions(accessLevel: StorageAccessLevel.protected);
     Amplify.Storage.list(path: 'protected', options: options).then((result) {
       print("Storage items");
       print(result.items);
@@ -117,24 +117,33 @@ class PhotosState extends State<Photos> {
               return RefreshWidget(
                   onRefresh: loadList,
                   child: Container(
-                  margin: EdgeInsets.only(
-                      left: 30.0, top: 20.0, right: 30.0, bottom: 20.0),
-                  child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                          crossAxisCount: 2),
-                      // Au lieu d'utiliser un chiffre codé en dur, nous pouvons maintenant faire en sorte que la taille de notre vue GridView soit basée sur la longueur des données de notre instantané.
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return CachedNetworkImage(
-                          imageUrl: snapshot.data[index],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator()),
-                        );
-                      })));
+                      margin: EdgeInsets.only(
+                          left: 30.0, top: 20.0, right: 30.0, bottom: 20.0),
+                      child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisSpacing: 8,
+                                  crossAxisSpacing: 8,
+                                  crossAxisCount: 2),
+                          // Au lieu d'utiliser un chiffre codé en dur, nous pouvons maintenant faire en sorte que la taille de notre vue GridView soit basée sur la longueur des données de notre instantané.
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      content: Text("Press received at index "+index.toString())
+                                    ));
+                                  });
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: snapshot.data[index],
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Container(
+                                      alignment: Alignment.center,
+                                      child: CircularProgressIndicator()),
+                                ));
+                          })));
             } else {
               // Si l'instantané ne comporte aucun élément, nous afficherons un texte indiquant qu'il n'y a rien à afficher.
               return Center(child: Text('No images to display.'));
