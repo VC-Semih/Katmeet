@@ -85,10 +85,16 @@ class SignUpState extends State<SignUp> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 24)),
                         ),
+                        SizedBox(height: 10.0),
                         TextFormField(
                           controller: _confirmController,
                           decoration: InputDecoration(
-                              hintText: "Enter confirmation code"),
+                              filled: true,
+                              fillColor: Colors.blue.shade100,
+                              border: OutlineInputBorder(),
+                              labelText: 'Enter confirmation code',
+                              hintText: 'Confirmeow',
+                              icon: Icon(Icons.star)),
                           validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter confirmation code';
@@ -96,38 +102,33 @@ class SignUpState extends State<SignUp> {
                             return null;
                           },
                         ),
-                        ConstrainedBox(
-                            constraints:
-                                const BoxConstraints(minWidth: double.infinity),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                              child: RaisedButton(
+                        SizedBox(height: 25.0),
+                        ElevatedButton(
                                 onPressed: () {
                                   if (_formKey.currentState.validate()) {
                                     _confirm();
                                   }
                                 },
                                 child: Text('CONFIRM ACCOUNT'),
-                              ),
-                            )),
-                        ConstrainedBox(
-                            constraints:
-                                const BoxConstraints(minWidth: double.infinity),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: FlatButton(
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
+
+                        ),
+
+                        ElevatedButton(
                                 onPressed: () {
                                   setState(() {
                                     _isSignedUp = false;
                                   });
                                 },
                                 child: Text('CANCEL'),
+                          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                               ),
-                            )),
                       ],
                     )),
+                SizedBox(height: 30.0),
                 Visibility(
                   visible: !_isSignedUp,
+
                   child: Column(
                     children: [
                       Padding(
@@ -136,10 +137,17 @@ class SignUpState extends State<SignUp> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 24)),
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _usernameController,
                         decoration:
-                            InputDecoration(hintText: "Enter a Username"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter a Username',
+                                hintText: 'SnowFlake',
+                                icon: Icon(Icons.star)),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter a Username';
@@ -147,10 +155,17 @@ class SignUpState extends State<SignUp> {
                           return null;
                         },
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _emailController,
                         decoration:
-                            InputDecoration(hintText: "Enter your Email"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter your Email',
+                                hintText: 'SnowFlake@katmeet.com',
+                                icon: Icon(Icons.star)),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter an Email Address';
@@ -158,10 +173,17 @@ class SignUpState extends State<SignUp> {
                           return null;
                         },
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _passwordController,
                         decoration:
-                            InputDecoration(hintText: "Enter a Password"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter a Password',
+                                hintText: '123-456-78',
+                                icon: Icon(Icons.star)),
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -170,10 +192,17 @@ class SignUpState extends State<SignUp> {
                           return null;
                         },
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _verifyPasswordController,
                         decoration:
-                            InputDecoration(hintText: "Verify Password"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Verify Password',
+                                hintText: '123-456-78',
+                                icon: Icon(Icons.star)),
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -186,34 +215,27 @@ class SignUpState extends State<SignUp> {
                           }
                         },
                       ),
-                      ConstrainedBox(
-                          constraints:
-                              const BoxConstraints(minWidth: double.infinity),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: RaisedButton(
+                      SizedBox(height: 30.0),
+                      ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   _signUp();
                                 }
                               },
                               child: Text('SIGN UP'),
-                            ),
-                          )),
-                      ConstrainedBox(
-                          constraints:
-                              const BoxConstraints(minWidth: double.infinity),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: FlatButton(
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
+                      ),
+                              
+                      ElevatedButton(
                               onPressed: () {
                                 setState(() {
                                   _isSignedUp = true;
                                 });
                               },
                               child: Text('CONFIRM ACCOUNT'),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                             ),
-                          )),
+
                     ],
                   ),
                 )

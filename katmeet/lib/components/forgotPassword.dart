@@ -75,7 +75,12 @@ class ForgotPasswordState extends State<ForgotPassword> {
                       TextFormField(
                         controller: _confirmController,
                         decoration: InputDecoration(
-                            hintText: 'Enter Confirmation Code'),
+                            filled: true,
+                            fillColor: Colors.blue.shade100,
+                            border: OutlineInputBorder(),
+                            labelText: 'Enter Confirmation Code',
+                            hintText: '123-456',
+                            icon: Icon(Icons.star)),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter a Confirmation Code';
@@ -86,7 +91,14 @@ class ForgotPasswordState extends State<ForgotPassword> {
                       TextFormField(
                         controller: _passwordController,
                         decoration:
-                            InputDecoration(hintText: 'Enter a New Password'),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter a New Password',
+                                hintText: 'SnowFlake',
+                                icon: Icon(Icons.star)
+                            ),
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -119,10 +131,17 @@ class ForgotPasswordState extends State<ForgotPassword> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 24)),
                       ),
+                      SizedBox(height: 10.0),
                       TextFormField(
                         controller: _usernameController,
                         decoration:
-                            InputDecoration(hintText: "Enter your Username"),
+                            InputDecoration(
+                                filled: true,
+                                fillColor: Colors.blue.shade100,
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter your Username',
+                                hintText: 'SnowFlake',
+                                icon: Icon(Icons.star)),
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value.isEmpty) {
@@ -131,20 +150,17 @@ class ForgotPasswordState extends State<ForgotPassword> {
                           return null;
                         },
                       ),
-                      ConstrainedBox(
-                          constraints:
-                              const BoxConstraints(minWidth: double.infinity),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                            child: RaisedButton(
+                      SizedBox(height: 25.0),
+                      ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   _forgotPass();
                                 }
                               },
                               child: Text('SUBMIT'),
+                        style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                             ),
-                          )),
+
                     ]))
               ],
             )));
