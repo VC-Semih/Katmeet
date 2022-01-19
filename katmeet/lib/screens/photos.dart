@@ -111,6 +111,7 @@ class PhotosState extends State<Photos> {
             if (snapshot.data.length != 0) {
               return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 8,
                       crossAxisCount: 2),
                   // Au lieu d'utiliser un chiffre codé en dur, nous pouvons maintenant faire en sorte que la taille de notre vue GridView soit basée sur la longueur des données de notre instantané.
                   itemCount: snapshot.data.length,
