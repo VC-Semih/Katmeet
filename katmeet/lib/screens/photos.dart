@@ -28,6 +28,7 @@ class Photos extends StatefulWidget {
 
 class PhotosState extends State<Photos> {
   final StorageService _storageService;
+  final keyRefresh = GlobalKey<RefreshIndicatorState>();
 
   PhotosState(this._storageService);
 
@@ -55,6 +56,8 @@ class PhotosState extends State<Photos> {
   }
 
   Future loadList() async {
+    keyRefresh.currentState?.show();
+    await Future.delayed(Duration(milliseconds: 1000));
     _storageService.getImages();
   }
 
@@ -118,7 +121,7 @@ class PhotosState extends State<Photos> {
                       margin: EdgeInsets.only(
                           left: 30.0, top: 20.0, right: 30.0, bottom: 20.0),
                       child: GridView.builder(
-                          physics: BouncingScrollPhysics(),
+                          physics: AlwaysScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   mainAxisSpacing: 8,
@@ -126,6 +129,9 @@ class PhotosState extends State<Photos> {
                                   crossAxisCount: 2),
                           // Au lieu d'utiliser un chiffre codé en dur, nous pouvons maintenant faire en sorte que la taille de notre vue GridView soit basée sur la longueur des données de notre instantané.
                           itemCount: snapshot.data.length,
+                          shrinkWrap: true,
+                          primary: false,
+
                           itemBuilder: (context, index) {
                             return FocusedMenuHolder(
                               menuWidth: MediaQuery.of(context).size.width*0.50,
@@ -171,7 +177,21 @@ class PhotosState extends State<Photos> {
                           })));
             } else {
               // Si l'instantané ne comporte aucun élément, nous afficherons un texte indiquant qu'il n'y a rien à afficher.
-              return Center(child: Text('No images to display.'));
+              return Center(
+                  child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("No images to display"),
+                    ElevatedButton(
+                        onPressed: () {
+                          loadList();
+                        },
+                        child: const Text('Reload')),
+                  ],
+                ),
+              ));
             }
           } else {
             return Center(child: CircularProgressIndicator());
