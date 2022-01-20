@@ -138,6 +138,9 @@ class DisplayPictureScreen extends StatelessWidget {
                           })
                     })
               });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Your photo has been uploaded ! ")
+              ));
               print("file uploaded");
               print(result.key);
               Navigator.pop(context);

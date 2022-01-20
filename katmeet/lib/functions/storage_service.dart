@@ -23,6 +23,7 @@ class StorageService {
       // Nous utilisons .map pour itérer sur chaque élément du résultat de la liste et renvoyer l'URL de téléchargement de chaque élément de manière asynchrone.
       final List<String> imageUrls =
           await Future.wait(result.items.map((item) async {
+            ///TODO: Get key and and pass it into the controller
         final urlResult =
             await Amplify.Storage.getUrl(key: item.key, options: getUrlOptions);
         return urlResult.url;
@@ -32,7 +33,7 @@ class StorageService {
       imageUrlsController.add(imageUrls);
     
     // Si nous rencontrons une erreur, il nous suffit de l'imprimer.
-    } catch (e) {
+    } on Exception catch (e) {
       print('Storage List error - $e');
     }
   }
