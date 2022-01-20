@@ -4,7 +4,7 @@ import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 
 class StorageService {
   // Nous commençons par initialiser un contrôleur StreamController qui va gérer les URL des images récupérées dans Amazon S3.
-  final imageUrlsController = StreamController<List<String>>();
+  final imageUrlsController = StreamController<Map<String, String>>();
 
   // Cette fonction va lancer le processus de récupération des images devant être affichées dans GalleryPage.
   void getImages() async {
@@ -21,16 +21,17 @@ class StorageService {
       final getUrlOptions =
           GetUrlOptions(accessLevel: StorageAccessLevel.protected);
       // Nous utilisons .map pour itérer sur chaque élément du résultat de la liste et renvoyer l'URL de téléchargement de chaque élément de manière asynchrone.
-      final List<String> imageUrls =
+      final List<List<String>> imageUrls =
           await Future.wait(result.items.map((item) async {
-            ///TODO: Get key and and pass it into the controller
         final urlResult =
             await Amplify.Storage.getUrl(key: item.key, options: getUrlOptions);
-        return urlResult.url;
+        return [item.key, urlResult.url];
       }));
 
+      final Map<String, String> imageUrlMap = new Map.fromIterable(imageUrls, key: (v) => v[0], value: (v) => v[1]);
+
       // Enfin, nous envoyons simplement la liste des URL dans le flux afin qu'elle soit étudiée.
-      imageUrlsController.add(imageUrls);
+      imageUrlsController.add(imageUrlMap);
     
     // Si nous rencontrons une erreur, il nous suffit de l'imprimer.
     } on Exception catch (e) {

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:katmeet/models/ModelProvider.dart';
 
 class PhotoRepository{

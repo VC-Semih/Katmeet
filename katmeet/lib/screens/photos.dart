@@ -13,6 +13,7 @@ import 'package:katmeet/screens/Profile.dart';
 import 'package:katmeet/screens/photo_display.dart';
 import 'package:katmeet/widget/refresh_widget.dart';
 
+import '../photo_repository.dart';
 import 'capture.dart';
 
 class Photos extends StatefulWidget {
@@ -55,12 +56,6 @@ class PhotosState extends State<Photos> {
 
   Future loadList() async {
     _storageService.getImages();
-    S3ListOptions options =
-        S3ListOptions(accessLevel: StorageAccessLevel.protected);
-    Amplify.Storage.list(path: 'protected', options: options).then((result) {
-      print("Storage items");
-      print(result.items);
-    }).catchError(print);
   }
 
   @override
@@ -112,7 +107,7 @@ class PhotosState extends State<Photos> {
     return StreamBuilder(
         // Le générateur StreamBuilder va utiliser le contrôleur imageUrlsController qui sera transmis du service StorageService pour fournir des instantanés de nos données.
         stream: _storageService.imageUrlsController.stream,
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<Map<String, String>> snapshot) {
           // L'interface utilisateur exige que l'instantané possède des données afin d'afficher quelque chose de pertinent à l'utilisateur.
           if (snapshot.hasData) {
             // Nous devons également déterminer si les données possèdent effectivement des éléments. Dans l'affirmative, nous poursuivons la génération de la vue GridView.
@@ -144,15 +139,30 @@ class PhotosState extends State<Photos> {
                               openWithTap: true,
                               menuItems: <FocusedMenuItem>[
                                 FocusedMenuItem(title: Text("Open"),trailingIcon: Icon(Icons.open_in_new) ,onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>PhotoDisplay()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>PhotoDisplay(imgUrl: snapshot.data.values.elementAt(index))));
                                 }),
                                 FocusedMenuItem(title: Text("Share"),trailingIcon: Icon(Icons.share) ,onPressed: (){}),
                                 FocusedMenuItem(title: Text("Favorite"),trailingIcon: Icon(Icons.favorite_border) ,onPressed: (){}),
-                                FocusedMenuItem(title: Text("Delete",style: TextStyle(color: Colors.redAccent),),trailingIcon: Icon(Icons.delete,color: Colors.redAccent,) ,onPressed: (){}),
+                                FocusedMenuItem(title: Text("Delete",style: TextStyle(color: Colors.redAccent),),trailingIcon: Icon(Icons.delete,color: Colors.redAccent,) ,onPressed: () async {
+                                  final s3key =  snapshot.data.keys.elementAt(index);
+                                  try {
+                                    RemoveOptions options = RemoveOptions(accessLevel: StorageAccessLevel.protected);
+                                    final RemoveResult result =
+                                    await Amplify.Storage.remove(key: s3key, options: options);
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text("Your photo ${result.key} has been deleted ! ")
+                                    ));
+                                    print('Deleted file: ${result.key}');
+                                    loadList();
+                                  } on StorageException catch (e) {
+                                    print('Error deleting file: $e');
+                                  }
+                                  await PhotoRepository.deletePhotoByS3(s3Key: s3key);
+                                }),
                               ],
                               onPressed: (){},
                               child: CachedNetworkImage(
-                                imageUrl: snapshot.data[index],
+                                imageUrl: snapshot.data.values.elementAt(index),
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => Container(
                                     alignment: Alignment.center,
