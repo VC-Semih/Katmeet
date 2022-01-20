@@ -6,8 +6,11 @@ import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/screens/Profile.dart';
+import 'package:katmeet/screens/photo_display.dart';
 import 'package:katmeet/widget/refresh_widget.dart';
 
 import 'capture.dart';
@@ -120,6 +123,7 @@ class PhotosState extends State<Photos> {
                       margin: EdgeInsets.only(
                           left: 30.0, top: 20.0, right: 30.0, bottom: 20.0),
                       child: GridView.builder(
+                          physics: BouncingScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   mainAxisSpacing: 8,
@@ -128,21 +132,32 @@ class PhotosState extends State<Photos> {
                           // Au lieu d'utiliser un chiffre codé en dur, nous pouvons maintenant faire en sorte que la taille de notre vue GridView soit basée sur la longueur des données de notre instantané.
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                      content: Text("Press received at index "+index.toString())
-                                    ));
-                                  });
-                                },
-                                child: CachedNetworkImage(
-                                  imageUrl: snapshot.data[index],
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => Container(
-                                      alignment: Alignment.center,
-                                      child: CircularProgressIndicator()),
-                                ));
+                            return FocusedMenuHolder(
+                              menuWidth: MediaQuery.of(context).size.width*0.50,
+                              blurSize: 5.0,
+                              menuItemExtent: 45,
+                              menuBoxDecoration: BoxDecoration(color: Colors.grey,borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                              duration: Duration(milliseconds: 100),
+                              animateMenuItems: true,
+                              blurBackgroundColor: Colors.black54,
+                              bottomOffsetHeight: 100,
+                              openWithTap: true,
+                              menuItems: <FocusedMenuItem>[
+                                FocusedMenuItem(title: Text("Open"),trailingIcon: Icon(Icons.open_in_new) ,onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>PhotoDisplay()));
+                                }),
+                                FocusedMenuItem(title: Text("Share"),trailingIcon: Icon(Icons.share) ,onPressed: (){}),
+                                FocusedMenuItem(title: Text("Favorite"),trailingIcon: Icon(Icons.favorite_border) ,onPressed: (){}),
+                                FocusedMenuItem(title: Text("Delete",style: TextStyle(color: Colors.redAccent),),trailingIcon: Icon(Icons.delete,color: Colors.redAccent,) ,onPressed: (){}),
+                              ],
+                              onPressed: (){},
+                              child: CachedNetworkImage(
+                                imageUrl: snapshot.data[index],
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Container(
+                                    alignment: Alignment.center,
+                                    child: CircularProgressIndicator()),
+                              ));
                           })));
             } else {
               // Si l'instantané ne comporte aucun élément, nous afficherons un texte indiquant qu'il n'y a rien à afficher.
