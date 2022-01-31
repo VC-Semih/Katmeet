@@ -22,7 +22,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Miroslava Savitskaya',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                  Text('Faisal',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                   Text('Active Status',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold))
                 ],
               )

@@ -1,4 +1,5 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'SideBar.dart';
 import 'configuration.dart';
@@ -11,6 +12,21 @@ class HomePage extends StatefulWidget {
   final AmplifyAuthCognito auth;
 }
 class HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  AuthUser _user;
+
+  @override
+  void initState() {
+    super.initState();
+    Amplify.Auth.getCurrentUser().then((user) {
+      setState(() {
+        _user = user;
+      });
+    }).catchError((error) {
+      print((error as AuthException).message);
+
+    });
+  }
+
 
   double xOffset = 0;
   double yOffset = 0;
@@ -66,14 +82,14 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       }),
                   Column(
                     children: [
-                      Text('Location'),
+                      Text(_user.username),
                       Row(
                         children: [
                           Icon(
                             Icons.location_on,
                             color: primaryGreen,
                           ),
-                          Text('Ukraine'),
+                          Text('Laon'),
                         ],
                       ),
                     ],
