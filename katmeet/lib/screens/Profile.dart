@@ -10,21 +10,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   AuthUser _user;
 
-
-
-  @override
-  void initState() {
-    super.initState();
-    Amplify.Auth.getCurrentUser().then((user) {
-      setState(() {
-        _user = user;
-      });
-    }).catchError((error) {
-      print((error as AuthException).message);
-
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
