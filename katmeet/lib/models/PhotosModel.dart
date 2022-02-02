@@ -22,7 +22,7 @@ class PhotosModel extends Model {
   static const classType = const PhotosModelType();
   final String id;
   final String s3key;
-  final String usermodelID;
+  final String animalmodelID;
 
   @override
   getInstanceType() => classType;
@@ -33,13 +33,16 @@ class PhotosModel extends Model {
   }
 
   const PhotosModel._internal(
-      {@required this.id, this.s3key, this.usermodelID});
+      {@required this.id, @required this.s3key, @required this.animalmodelID});
 
-  factory PhotosModel({@required String id, String s3key, String usermodelID}) {
+  factory PhotosModel(
+      {@required String id,
+      @required String s3key,
+      @required String animalmodelID}) {
     return PhotosModel._internal(
         id: id == null ? UUID.getUUID() : id,
         s3key: s3key,
-        usermodelID: usermodelID);
+        animalmodelID: animalmodelID);
   }
 
   bool equals(Object other) {
@@ -52,7 +55,7 @@ class PhotosModel extends Model {
     return other is PhotosModel &&
         id == other.id &&
         s3key == other.s3key &&
-        usermodelID == other.usermodelID;
+        animalmodelID == other.animalmodelID;
   }
 
   @override
@@ -65,31 +68,34 @@ class PhotosModel extends Model {
     buffer.write("PhotosModel {");
     buffer.write("id=" + id + ", ");
     buffer.write("s3key=" + s3key + ", ");
-    buffer.write("usermodelID=" + usermodelID);
+    buffer.write("animalmodelID=" + animalmodelID);
     buffer.write("}");
 
     return buffer.toString();
   }
 
   PhotosModel copyWith(
-      {@required String id, String s3key, String usermodelID}) {
+      {@required String id,
+      @required String s3key,
+      @required String animalmodelID}) {
     return PhotosModel(
         id: id ?? this.id,
         s3key: s3key ?? this.s3key,
-        usermodelID: usermodelID ?? this.usermodelID);
+        animalmodelID: animalmodelID ?? this.animalmodelID);
   }
 
   PhotosModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         s3key = json['s3key'],
-        usermodelID = json['usermodelID'];
+        animalmodelID = json['animalmodelID'];
 
   Map<String, dynamic> toJson() =>
-      {'id': id, 's3key': s3key, 'usermodelID': usermodelID};
+      {'id': id, 's3key': s3key, 'animalmodelID': animalmodelID};
 
   static final QueryField ID = QueryField(fieldName: "photosModel.id");
   static final QueryField S3KEY = QueryField(fieldName: "s3key");
-  static final QueryField USERMODELID = QueryField(fieldName: "usermodelID");
+  static final QueryField ANIMALMODELID =
+      QueryField(fieldName: "animalmodelID");
   static var schema =
       Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "PhotosModel";
@@ -108,12 +114,12 @@ class PhotosModel extends Model {
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: PhotosModel.S3KEY,
-        isRequired: false,
+        isRequired: true,
         ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-        key: PhotosModel.USERMODELID,
-        isRequired: false,
+        key: PhotosModel.ANIMALMODELID,
+        isRequired: true,
         ofType: ModelFieldType(ModelFieldTypeEnum.string)));
   });
 }

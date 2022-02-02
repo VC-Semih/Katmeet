@@ -131,13 +131,13 @@ class DisplayPictureScreen extends StatelessWidget {
           try {
             File local = File(imagePath);
             Amplify.Storage.uploadFile(key: key, local: local, options: options).then((UploadFileResult result) {
-              AuthRepository.getEmailFromAttributes().then((String email) => {
+              /*AuthRepository.getEmailFromAttributes().then((String email) => {
                     UserRepository.getUserByEmail(email).then((UserModel userObject) => {
                           PhotoRepository.createPhoto(s3Key: result.key, userID: userObject.id).then((PhotosModel photoObject) => {
                             print(photoObject)
                           })
                     })
-              });
+              });*/
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text("Your photo has been uploaded ! ")
               ));
