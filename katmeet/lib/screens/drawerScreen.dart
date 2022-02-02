@@ -2,6 +2,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:katmeet/screens/Profile.dart';
+import 'SideBar.dart';
 import 'configuration.dart';
 import 'package:easy_widgets/easy_widget.dart';
 
@@ -42,12 +43,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               SizedBox(width: 10,),
               TextButton(
                 onPressed: () {
-                 context.pushAll(
-                   [
-                     DashboardScreen()
-                   ],
-                   transitionType: EasyTransitionType.rightToLeft,
-                 );
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Profile()));
                 },
                 child: Text(
                   'Profile', //title

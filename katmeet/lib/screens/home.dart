@@ -126,7 +126,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     child: Column(
                       children: [
                         Container(
-
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.only(left: 20),
                           decoration: BoxDecoration(
@@ -174,7 +173,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ],
                       ),
                     ),
-                    Expanded(child: Container(
+                    Expanded(
+                        child: Container(
                       margin: EdgeInsets.only(top: 60,bottom: 20),
                       decoration: BoxDecoration(color: Colors.white,
 

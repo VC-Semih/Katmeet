@@ -1,15 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:amplify_flutter/amplify.dart';
+import 'dart:ui';
+
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
+import 'package:flutter/material.dart';
+import 'configuration.dart';
 
-class DashboardScreen extends StatefulWidget {
+class Profile extends StatefulWidget {
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  _Profile createState() => _Profile();
 }
-
-class _DashboardScreenState extends State<DashboardScreen> {
+class _Profile extends State<Profile> {
   AuthUser _user;
-
   @override
   void initState() {
     super.initState();
@@ -26,83 +27,118 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.grey[200], Colors.grey[200]]
+      body: Stack(
+        children: [
+          Positioned.fill(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.blueGrey[300],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                    ),
                   )
+                ],
+              )),
+          Container(
+            margin:EdgeInsets.only(top: 20),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){
+                    Navigator.pop(context);
+                  }),
+                  IconButton(icon: Icon(Icons.share), onPressed: (){
+
+                  })
+                ],
               ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 50),
+            child: Align(
+
+              alignment: Alignment.topCenter,
+              child: Hero(
+                  tag: 1,
+                  child: Image.asset('assets/images/pet-cat2.png')),
+            ),
+          ),
+
+          Align(
+            alignment: Alignment.center,
               child: Container(
                 width: double.infinity,
-                height: 350.0,
+                height: 450.0,
                 child: Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(
-                        height: 80.0,
-                      ),
-                      CircleAvatar(backgroundImage: NetworkImage('https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&rect=37%2C29%2C4955%2C3293&q=45&auto=format&w=926&fit=clip'),radius: 50.0,),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        _user.username,
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          color: Colors.blueGrey,
+                      CircleAvatar(
+                        backgroundColor: primaryGreen,
+                        child: CircleAvatar(
+                          radius: 55,
+                          backgroundImage: NetworkImage(
+                            "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
+                          ),
                         ),
+                        radius: 60,
                       ),
                       SizedBox(
-                        height: 10.0,
+                        height: 5.0,
                       ),
+                      Card(
+                        margin: EdgeInsets.symmetric(horizontal: 80.0,vertical: 5.0),
+                        clipBehavior: Clip.antiAlias,
+                        color: primaryGreen,
+                        elevation: 3.0,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 10),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      _user.username,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ) ,
+
                       Card(
                         margin: EdgeInsets.symmetric(horizontal: 20.0,vertical: 5.0),
                         clipBehavior: Clip.antiAlias,
-                        color: Colors.white,
-                        elevation: 5.0,
+                        color: primaryGreen,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
                           child: Row(
                             children: <Widget>[
                               Expanded(
                                 child: Column(
-
                                   children: <Widget>[
-                                    Text(
-                                      "Posts",
-                                      style: TextStyle(
-                                        color: Colors.blueGrey,
-                                        fontSize: 22.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
                                     SizedBox(
                                       height: 5.0,
                                     ),
                                     Text(
-                                      "1",
+                                      "Posts",
                                       style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.blueGrey,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-
-                                  children: <Widget>[
-                                    Text(
-                                      "Adopted",
-                                      style: TextStyle(
-                                        color: Colors.blueGrey,
+                                        color: Colors.white,
                                         fontSize: 22.0,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -114,7 +150,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       "2",
                                       style: TextStyle(
                                         fontSize: 20.0,
-                                        color: Colors.blueGrey,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      "Adopted",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Text(
+                                      "4",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
                                       ),
                                     )
                                   ],
@@ -127,7 +187,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Text(
                                       "Given",
                                       style: TextStyle(
-                                        color: Colors.blueGrey,
+                                        color: Colors.white,
                                         fontSize: 22.0,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -136,12 +196,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       height: 5.0,
                                     ),
                                     Text(
-                                      "2",
+                                      "12",
                                       style: TextStyle(
                                         fontSize: 20.0,
-                                        color: Colors.blueGrey,
+                                        color: Colors.white,
                                       ),
                                     )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Card(
+                        margin: EdgeInsets.symmetric(horizontal: 20.0,vertical: 5.0),
+                        clipBehavior: Clip.antiAlias,
+                        color: primaryGreen,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Text(
+                                      "test",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -151,73 +243,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       )
                     ],
                   ),
+
                 ),
               )
           ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30.0,horizontal: 16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Bio:",
-                    style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 28.0
+
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              height: 120,
+              child: Row(
+                children: [
+                  Container(
+                    height: 60,
+                    width: 70,
+                    decoration: BoxDecoration(
+                        color: primaryGreen,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Icon(Icons.favorite_border,color: Colors.white,),
+                  ),
+                  SizedBox(width: 10,),
+                  Expanded(
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(20)),
+                      child: Center(child: Text('Adoption',style: TextStyle(color: Colors.white,fontSize: 24),)),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Text('kitty Cat.\n'
-                      'if you need any mobile app for your company then contact me for more informations',
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.black,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
+                  )
                 ],
+              )
+              ,
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40), )
               ),
             ),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Container(
-            width: 300.00,
-
-            child: RaisedButton(
-                onPressed: (){},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(80.0)
-                ),
-                elevation: 0.0,
-                padding: EdgeInsets.all(0.0),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerRight,
-                        end: Alignment.centerLeft,
-                        colors: [Colors.blueGrey,Colors.blueAccent]
-                    ),
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
-                    alignment: Alignment.center,
-                    child: Text("Edit",
-                      style: TextStyle(color: Colors.white, fontSize: 26.0, fontWeight:FontWeight.w300),
-                    ),
-                  ),
-                )
-            ),
-          ),
+          )
         ],
       ),
     );
