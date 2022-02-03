@@ -9,8 +9,16 @@ class Profile extends StatefulWidget {
   @override
   _Profile createState() => _Profile();
 }
+
 class _Profile extends State<Profile> {
   AuthUser _user;
+
+  var theme1 = Colors.white;
+  var theme2 = Color(0xff2E324F);
+  var white = Colors.white;
+  var black = Colors.black;
+  bool switchColor = false;
+
   @override
   void initState() {
     super.initState();
@@ -20,332 +28,260 @@ class _Profile extends State<Profile> {
       });
     }).catchError((error) {
       print((error as AuthException).message);
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-          child: new Column(
-              children: <Widget>[
 
-                Card(
-                  child: new Stack(
-                    alignment: AlignmentDirectional.center,//add this line
-                    children: <Widget>[
-                    Image.asset('assets/images/pet-cat2.png'),
-                      new Container(
-                        width: 200.0,
-                        height: 200.0,
-                      ),
-                      new Container(
-                        alignment: new FractionalOffset(0.0, 0.0),
-                        decoration: new BoxDecoration(
-                          border: new Border.all(
-                            color: Colors.blue.withOpacity(0.5),
-                            width: 20, // it's my slider variable, to change the size of the circle
-                          ),
-                          shape: BoxShape.circle,
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        backgroundColor: theme1,
+        elevation: 0.0,
+        leading: Icon(
+          Icons.arrow_back,
+          color: black,
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              Icons.favorite_border,
+              color: black,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 8.0, 12.0, 8.0),
+            child: Icon(
+              Icons.more_vert,
+              color: black,
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(50.0, 12.0, 50.0, 8.0),
+                child: Stack(
+                  alignment: const Alignment(0.9, 0.9),
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: primaryGreen,
+                      child: CircleAvatar(
+                        radius: 55,
+                        backgroundImage: NetworkImage(
+                          "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
                         ),
                       ),
-                      new Container(
-                        child: Card(
-                          margin: EdgeInsets.symmetric(horizontal: 80.0,vertical: 5.0),
-                          clipBehavior: Clip.antiAlias,
-                          color: primaryGreen,
-                          elevation: 3.0,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 10),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        _user.username,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                      radius: 60,
+                    ),
+                    Container(
+                      height: 30.0,
+                      width: 30.0,
+                      child: Image.asset("assets/images/pet-cat2.png"),
+                      alignment: Alignment.bottomRight,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+              child: Text(_user.username,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: primaryGreen,
+                      fontSize: 26.0,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
+              child: Text("ahmad143.faisal@gmail.com",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: primaryGreen,
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
+              child: Text("76 rue des chats 0897,DOGs",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: primaryGreen,
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40.0, 8.0, 40.0, 0.0),
+              child: Divider(
+                color: Color(0xff78909c),
+                height: 30.0,
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
+              clipBehavior: Clip.antiAlias,
+              color: primaryGreen,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "Posts",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Card(
-                  margin: EdgeInsets.symmetric(horizontal: 80.0,vertical: 5.0),
-                  clipBehavior: Clip.antiAlias,
-                  color: primaryGreen,
-                  elevation: 3.0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                _user.username,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                          SizedBox(
+                            height: 5.0,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "2",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                Card(
-                  margin: EdgeInsets.symmetric(horizontal: 80.0,vertical: 5.0),
-                  clipBehavior: Clip.antiAlias,
-                  color: primaryGreen,
-                  elevation: 3.0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                _user.username,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Adopted",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "4",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                Card(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0,vertical: 5.0),
-                  clipBehavior: Clip.antiAlias,
-                  color: primaryGreen,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "Posts",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "2",
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Adopted",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "4",
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
+                    Expanded(
+                      child: Column(
 
-                            children: <Widget>[
-                              Text(
-                                "Given",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "12",
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
+                        children: <Widget>[
+                          Text(
+                            "Given",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "12",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                Card(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0,vertical: 5.0),
-                  clipBehavior: Clip.antiAlias,
-                  color: primaryGreen,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "Posts",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "2",
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Adopted",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "4",
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
+              clipBehavior: Clip.antiAlias,
+              color: primaryGreen,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
+                child: Row(
 
-                            children: <Widget>[
-                              Text(
-                                "Given",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(
-                                "12",
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 5.0,
                           ),
-                        ),
-                      ],
+                         Text(
+                            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    height: 120,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 60,
-                          width: 70,
-                          decoration: BoxDecoration(
-                              color: primaryGreen,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Icon(Icons.favorite_border,color: Colors.white,),
-                        ),
-                        SizedBox(width: 10,),
-                        Expanded(
-                          child: Container(
-                            height: 60,
-                            decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(20)),
-                            child: Center(child: Text('Adoption',style: TextStyle(color: Colors.white,fontSize: 24),)),
-                          ),
-                        )
-                      ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                height: 120,
+                child: Row(
+                  children: [
+                    Container(
+                      height: 60,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: primaryGreen,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Icon(Icons.favorite_border,color: Colors.white,),
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(20)),
+                        child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
+                      ),
                     )
-                    ,
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40), )
-                    ),
-                  ),
+                  ],
                 )
-         ])
-      ));
+                ,
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40), )
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
