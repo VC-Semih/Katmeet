@@ -45,6 +45,7 @@ dependencies:
   flutter_tindercard: ^0.2.0
   font_awesome_flutter: ^9.2.0
   easy_widgets: ^0.0.7
+  flutter_native_splash: ^2.0.1+1
 
 
 dev_dependencies:
@@ -78,6 +79,9 @@ flutter:
           weight: 100
         - asset: assets/fonts/CircularStd-Bold.ttf
           weight: 500
+flutter_native_splash:
+  image: assets/images/pet-cat2.png
+  color: 42a5f5
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
