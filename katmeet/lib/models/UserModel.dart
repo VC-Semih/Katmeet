@@ -25,7 +25,11 @@ class UserModel extends Model {
   final String id;
   final String username;
   final String email;
-  final List<PhotosModel> PhotosModels;
+  final String profilePictureS3Key;
+  final String aboutMe;
+  final String phoneNumber;
+  final String adress;
+  final List<UserModelAnimalModel> likedAnimals;
 
   @override
   getInstanceType() => classType;
@@ -39,20 +43,32 @@ class UserModel extends Model {
       {@required this.id,
       @required this.username,
       @required this.email,
-      this.PhotosModels});
+      this.profilePictureS3Key,
+      this.aboutMe,
+      this.phoneNumber,
+      this.adress,
+      this.likedAnimals});
 
   factory UserModel(
       {@required String id,
       @required String username,
       @required String email,
-      List<PhotosModel> PhotosModels}) {
+      String profilePictureS3Key,
+      String aboutMe,
+      String phoneNumber,
+      String adress,
+      List<UserModelAnimalModel> likedAnimals}) {
     return UserModel._internal(
         id: id == null ? UUID.getUUID() : id,
         username: username,
         email: email,
-        PhotosModels: PhotosModels != null
-            ? List.unmodifiable(PhotosModels)
-            : PhotosModels);
+        profilePictureS3Key: profilePictureS3Key,
+        aboutMe: aboutMe,
+        phoneNumber: phoneNumber,
+        adress: adress,
+        likedAnimals: likedAnimals != null
+            ? List.unmodifiable(likedAnimals)
+            : likedAnimals);
   }
 
   bool equals(Object other) {
@@ -66,7 +82,11 @@ class UserModel extends Model {
         id == other.id &&
         username == other.username &&
         email == other.email &&
-        DeepCollectionEquality().equals(PhotosModels, other.PhotosModels);
+        profilePictureS3Key == other.profilePictureS3Key &&
+        aboutMe == other.aboutMe &&
+        phoneNumber == other.phoneNumber &&
+        adress == other.adress &&
+        DeepCollectionEquality().equals(likedAnimals, other.likedAnimals);
   }
 
   @override
@@ -79,7 +99,11 @@ class UserModel extends Model {
     buffer.write("UserModel {");
     buffer.write("id=" + id + ", ");
     buffer.write("username=" + username + ", ");
-    buffer.write("email=" + email);
+    buffer.write("email=" + email + ", ");
+    buffer.write("profilePictureS3Key=" + profilePictureS3Key + ", ");
+    buffer.write("aboutMe=" + aboutMe + ", ");
+    buffer.write("phoneNumber=" + phoneNumber + ", ");
+    buffer.write("adress=" + adress);
     buffer.write("}");
 
     return buffer.toString();
@@ -89,22 +113,34 @@ class UserModel extends Model {
       {@required String id,
       @required String username,
       @required String email,
-      List<PhotosModel> PhotosModels}) {
+      String profilePictureS3Key,
+      String aboutMe,
+      String phoneNumber,
+      String adress,
+      List<UserModelAnimalModel> likedAnimals}) {
     return UserModel(
         id: id ?? this.id,
         username: username ?? this.username,
         email: email ?? this.email,
-        PhotosModels: PhotosModels ?? this.PhotosModels);
+        profilePictureS3Key: profilePictureS3Key ?? this.profilePictureS3Key,
+        aboutMe: aboutMe ?? this.aboutMe,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        adress: adress ?? this.adress,
+        likedAnimals: likedAnimals ?? this.likedAnimals);
   }
 
   UserModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         username = json['username'],
         email = json['email'],
-        PhotosModels = json['PhotosModels'] is List
-            ? (json['PhotosModels'] as List)
-                .map((e) =>
-                    PhotosModel.fromJson(new Map<String, dynamic>.from(e)))
+        profilePictureS3Key = json['profilePictureS3Key'],
+        aboutMe = json['aboutMe'],
+        phoneNumber = json['phoneNumber'],
+        adress = json['adress'],
+        likedAnimals = json['likedAnimals'] is List
+            ? (json['likedAnimals'] as List)
+                .map((e) => UserModelAnimalModel.fromJson(
+                    new Map<String, dynamic>.from(e)))
                 .toList()
             : null;
 
@@ -112,16 +148,25 @@ class UserModel extends Model {
         'id': id,
         'username': username,
         'email': email,
-        'PhotosModels': PhotosModels?.map((e) => e?.toJson())
+        'profilePictureS3Key': profilePictureS3Key,
+        'aboutMe': aboutMe,
+        'phoneNumber': phoneNumber,
+        'adress': adress,
+        'likedAnimals': likedAnimals?.map((e) => e?.toJson())
       };
 
   static final QueryField ID = QueryField(fieldName: "userModel.id");
   static final QueryField USERNAME = QueryField(fieldName: "username");
   static final QueryField EMAIL = QueryField(fieldName: "email");
-  static final QueryField PHOTOSMODELS = QueryField(
-      fieldName: "PhotosModels",
+  static final QueryField PROFILEPICTURES3KEY =
+      QueryField(fieldName: "profilePictureS3Key");
+  static final QueryField ABOUTME = QueryField(fieldName: "aboutMe");
+  static final QueryField PHONENUMBER = QueryField(fieldName: "phoneNumber");
+  static final QueryField ADRESS = QueryField(fieldName: "adress");
+  static final QueryField LIKEDANIMALS = QueryField(
+      fieldName: "likedAnimals",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (PhotosModel).toString()));
+          ofModelName: (UserModelAnimalModel).toString()));
   static var schema =
       Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "UserModel";
@@ -148,11 +193,31 @@ class UserModel extends Model {
         isRequired: true,
         ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-        key: UserModel.PHOTOSMODELS,
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: UserModel.PROFILEPICTURES3KEY,
         isRequired: false,
-        ofModelName: (PhotosModel).toString(),
-        associatedKey: PhotosModel.USERMODELID));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: UserModel.ABOUTME,
+        isRequired: false,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: UserModel.PHONENUMBER,
+        isRequired: false,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: UserModel.ADRESS,
+        isRequired: false,
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+        key: UserModel.LIKEDANIMALS,
+        isRequired: false,
+        ofModelName: (UserModelAnimalModel).toString(),
+        associatedKey: UserModelAnimalModel.USERMODEL));
   });
 }
 

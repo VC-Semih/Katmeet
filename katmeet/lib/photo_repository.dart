@@ -17,11 +17,11 @@ class PhotoRepository{
     }
   }
 
-  static Future<List<PhotosModel>> getPhotosByUserId(String userId) async {
+  static Future<List<PhotosModel>> getPhotosByAnimalID(String animalID) async {
     try {
       final photos = await Amplify.DataStore.query(
         PhotosModel.classType,
-        where: PhotosModel.USERMODELID.eq(userId),
+        where: PhotosModel.ANIMALMODELID.eq(animalID),
       );
       return photos.isNotEmpty ? photos : null;
     } on Exception catch (e) {
@@ -42,8 +42,8 @@ class PhotoRepository{
   }
 
   static Future<PhotosModel> createPhoto(
-      {String s3Key, String userID}) async {
-    final newPhoto = PhotosModel(s3key: s3Key, usermodelID: userID);
+      {String s3Key, String animalID}) async {
+    final newPhoto = PhotosModel(s3key: s3Key, animalmodelID: animalID);
     try {
       await Amplify.DataStore.save(newPhoto);
       return newPhoto;

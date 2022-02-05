@@ -2,10 +2,5 @@
   "AppSyncApiName": "katmeet",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthCognitoUserPoolId": {
-    "Fn::GetAtt": [
-      "authkatmeet13ef10e3",
-      "Outputs.UserPoolId"
-    ]
-  }
+  "AuthModeLastUpdated": "2022-02-02T17:11:39.081Z"
 }
