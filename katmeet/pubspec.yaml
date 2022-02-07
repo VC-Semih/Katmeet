@@ -45,7 +45,7 @@ dependencies:
   flutter_tindercard: ^0.2.0
   font_awesome_flutter: ^9.2.0
   easy_widgets: ^0.0.7
-  flutter_native_splash: ^2.0.1+1
+  flutter_native_splash:
 
 
 dev_dependencies:

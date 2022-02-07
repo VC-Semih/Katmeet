@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 Color primaryGreen = Color(0xff416d6d);
 List<BoxShadow> shadowList = [

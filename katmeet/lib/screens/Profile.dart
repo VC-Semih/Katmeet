@@ -3,7 +3,10 @@ import 'dart:ui';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
+import 'package:katmeet/models/UserModel.dart';
+import 'package:katmeet/user_repository.dart';
 import 'configuration.dart';
+import 'package:katmeet/auth_repository.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -11,7 +14,7 @@ class Profile extends StatefulWidget {
 }
 
 class _Profile extends State<Profile> {
-  AuthUser _user;
+  UserModel userModel;
 
   var theme1 = Colors.white;
   var theme2 = Color(0xff2E324F);
@@ -20,15 +23,16 @@ class _Profile extends State<Profile> {
   bool switchColor = false;
 
   @override
-  void initState() {
+  Future<void> initState() {
     super.initState();
-    Amplify.Auth.getCurrentUser().then((user) {
-      setState(() {
-        _user = user;
-      });
-    }).catchError((error) {
-      print((error as AuthException).message);
-    });
+
+    AuthRepository.getEmailFromAttributes().then((email) => {
+          UserRepository.getUserByEmail(email).then((user) => {
+                setState(() {
+                  userModel = user;
+                })
+              })
+        });
   }
 
   @override
@@ -91,7 +95,7 @@ class _Profile extends State<Profile> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
-              child: Text(_user.username,
+              child: Text(userModel.username,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: primaryGreen,
@@ -100,7 +104,7 @@ class _Profile extends State<Profile> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
-              child: Text("ahmad143.faisal@gmail.com",
+              child: Text(userModel.email,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: primaryGreen,
