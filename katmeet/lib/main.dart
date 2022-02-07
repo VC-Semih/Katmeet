@@ -6,6 +6,8 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:katmeet/models/ModelProvider.dart';
+import 'package:katmeet/screens/drawerScreen.dart';
+import 'package:katmeet/screens/home.dart';
 import 'amplifyconfiguration.dart';
 import 'screens/auth.dart';
 import 'screens/photos.dart';
@@ -101,11 +103,20 @@ class MyApp extends State<MyAppState> {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+
         home: new FutureBuilder<void>(
           future: _checkSession(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return authenticated ? Photos(auth: auth) : Authenticator();
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    DrawerScreen(),
+                    HomePage(auth: auth)
+
+                  ],
+                ),
+              ); authenticated ? HomePage(auth: auth) : Authenticator();
             } else {
               return Center(child: CircularProgressIndicator());
             }

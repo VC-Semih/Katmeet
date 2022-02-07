@@ -1,16 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:amplify_flutter/amplify.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'dart:ui';
 
-class DashboardScreen extends StatefulWidget {
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
+import 'package:flutter/material.dart';
+import 'configuration.dart';
+
+class Profile extends StatefulWidget {
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  _Profile createState() => _Profile();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _Profile extends State<Profile> {
   AuthUser _user;
 
-
+  var theme1 = Colors.white;
+  var theme2 = Color(0xff2E324F);
+  var white = Colors.white;
+  var black = Colors.black;
+  bool switchColor = false;
 
   @override
   void initState() {
@@ -21,50 +28,258 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     }).catchError((error) {
       print((error as AuthException).message);
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Dashboard'),
-        actions: [
-          MaterialButton(
-            onPressed: () {
-              Amplify.Auth.signOut().then((_) {
-                Navigator.pushReplacementNamed(context, '/');
-              });
-            },
+        backgroundColor: theme1,
+        elevation: 0.0,
+        leading: Icon(
+          Icons.arrow_back,
+          color: black,
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Icon(
-              Icons.logout,
-              color: Colors.white,
+              Icons.favorite_border,
+              color: black,
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 8.0, 12.0, 8.0),
+            child: Icon(
+              Icons.more_vert,
+              color: black,
+            ),
+          ),
         ],
       ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (_user == null)
-                Text(
-                  'Loading...',
-                )
-              else ...[
-                Text(
-                  'Meowww 😺',
-                  style: Theme.of(context).textTheme.headline2,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(50.0, 12.0, 50.0, 8.0),
+                child: Stack(
+                  alignment: const Alignment(0.9, 0.9),
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: primaryGreen,
+                      child: CircleAvatar(
+                        radius: 55,
+                        backgroundImage: NetworkImage(
+                          "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
+                        ),
+                      ),
+                      radius: 60,
+                    ),
+                    Container(
+                      height: 30.0,
+                      width: 30.0,
+                      child: Image.asset("assets/images/pet-cat2.png"),
+                      alignment: Alignment.bottomRight,
+                    ),
+                  ],
                 ),
-                Text(_user.username),
-                SizedBox(height: 10),
-                Text(_user.userId),
-                SizedBox(height: 10),
-              ],
-            ],
-          ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+              child: Text(_user.username,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: primaryGreen,
+                      fontSize: 26.0,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
+              child: Text("ahmad143.faisal@gmail.com",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: primaryGreen,
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
+              child: Text("76 rue des chats 0897,DOGs",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: primaryGreen,
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40.0, 8.0, 40.0, 0.0),
+              child: Divider(
+                color: Color(0xff78909c),
+                height: 30.0,
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
+              clipBehavior: Clip.antiAlias,
+              color: primaryGreen,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "Posts",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "2",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Adopted",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "4",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+
+                        children: <Widget>[
+                          Text(
+                            "Given",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            "12",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
+              clipBehavior: Clip.antiAlias,
+              color: primaryGreen,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
+                child: Row(
+
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                         Text(
+                            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                height: 120,
+                child: Row(
+                  children: [
+                    Container(
+                      height: 60,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: primaryGreen,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Icon(Icons.favorite_border,color: Colors.white,),
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(20)),
+                        child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
+                      ),
+                    )
+                  ],
+                )
+                ,
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40), )
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

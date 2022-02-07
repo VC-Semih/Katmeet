@@ -100,7 +100,7 @@ class PhotosState extends State<Photos> {
     switch (item) {
       case 0:
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => DashboardScreen()),
+          MaterialPageRoute(builder: (context) => Profile()),
         );
         break;
     }
