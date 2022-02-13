@@ -1,6 +1,9 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
+import 'package:katmeet/auth_repository.dart';
+import 'package:katmeet/models/UserModel.dart';
+import 'package:katmeet/user_repository.dart';
 import 'SideBar.dart';
 import 'configuration.dart';
 
@@ -12,21 +15,8 @@ class HomePage extends StatefulWidget {
   final AmplifyAuthCognito auth;
 }
 class HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  AuthUser _user;
-
-  @override
-  void initState() {
-    super.initState();
-    Amplify.Auth.getCurrentUser().then((user) {
-      setState(() {
-        _user = user;
-      });
-    }).catchError((error) {
-      print((error as AuthException).message);
-
-    });
-  }
-
+  UserModel userModel;
+  bool _loading;
 
   double xOffset = 0;
   double yOffset = 0;
@@ -35,7 +25,22 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool isDrawerOpen = false;
 
   @override
+  void initState() {
+    super.initState();
+    _loading = true;
+    AuthRepository.getEmailFromAttributes().then((email) => {
+          UserRepository.getUserByEmail(email).then((user) => {
+                setState(() {
+                  _loading = false;
+                  userModel = user;
+                })
+              })
+        });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_loading) return CircularProgressIndicator();
     return AnimatedContainer(
       transform: Matrix4.translationValues(xOffset, yOffset, 0)
         ..scale(scaleFactor)..rotateY(isDrawerOpen? -0.5:0),
@@ -82,7 +87,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       }),
                   Column(
                     children: [
-                      Text(_user.username),
+                      Text(userModel.username),
                       Row(
                         children: [
                           Icon(
