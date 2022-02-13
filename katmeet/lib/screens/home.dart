@@ -40,7 +40,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) return CircularProgressIndicator();
     return AnimatedContainer(
       transform: Matrix4.translationValues(xOffset, yOffset, 0)
         ..scale(scaleFactor)..rotateY(isDrawerOpen? -0.5:0),
@@ -87,7 +86,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       }),
                   Column(
                     children: [
-                      Text(userModel.username),
+                      _loading ? CircularProgressIndicator() : Text(userModel.username),
                       Row(
                         children: [
                           Icon(

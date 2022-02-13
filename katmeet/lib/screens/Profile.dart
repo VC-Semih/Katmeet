@@ -7,6 +7,7 @@ import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
 import 'configuration.dart';
 import 'package:katmeet/auth_repository.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class Profile extends StatefulWidget {
 
 class _Profile extends State<Profile> {
   UserModel userModel;
+  bool _loading;
 
   var theme1 = Colors.white;
   var theme2 = Color(0xff2E324F);
@@ -25,11 +27,12 @@ class _Profile extends State<Profile> {
   @override
   Future<void> initState() {
     super.initState();
-
+    _loading = true;
     AuthRepository.getEmailFromAttributes().then((email) => {
           UserRepository.getUserByEmail(email).then((user) => {
                 setState(() {
                   userModel = user;
+                  _loading = true;
                 })
               })
         });
@@ -37,7 +40,6 @@ class _Profile extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -65,7 +67,7 @@ class _Profile extends State<Profile> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: _loading ? loadingWidget(_loading) : Column(
           children: <Widget>[
             Container(
               child: Padding(
@@ -95,7 +97,7 @@ class _Profile extends State<Profile> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
-              child: Text(userModel.username,
+              child: Text(userModel.username != null ? userModel.username : "",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: primaryGreen,
@@ -113,7 +115,7 @@ class _Profile extends State<Profile> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
-              child: Text(userModel.phoneNumber,
+              child: Text(userModel.phoneNumber != null ? userModel.phoneNumber : "",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: primaryGreen,
@@ -122,7 +124,7 @@ class _Profile extends State<Profile> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
-              child: Text(userModel.adress,
+              child: Text(userModel.adress != null ? userModel.adress : "",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: primaryGreen,
@@ -240,7 +242,7 @@ class _Profile extends State<Profile> {
                             height: 5.0,
                           ),
                          Text(
-                           userModel.aboutMe,
+                           userModel.aboutMe != null ? userModel.aboutMe : "Hello ! I am using Katmeet",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               color: Colors.white,
@@ -297,4 +299,13 @@ class _Profile extends State<Profile> {
       ),
     );
   }
+}
+
+Widget loadingWidget(_loading) {
+  return Padding(
+      padding: const EdgeInsets.fromLTRB(50.0, 12.0, 50.0, 8.0),
+      child:
+        Center(
+            child: CircularProgressIndicator()
+        ));
 }
