@@ -7,7 +7,6 @@ import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
 import 'configuration.dart';
 import 'package:katmeet/auth_repository.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 class Profile extends StatefulWidget {
   @override

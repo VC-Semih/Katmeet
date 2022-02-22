@@ -103,7 +103,6 @@ class MyApp extends State<MyAppState> {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-
         home: new FutureBuilder<void>(
           future: _checkSession(),
           builder: (context, snapshot) {
@@ -112,8 +111,7 @@ class MyApp extends State<MyAppState> {
                 body: Stack(
                   children: [
                     DrawerScreen(),
-                    HomePage(auth: auth)
-
+                    authenticated ? HomePage(auth: auth) : Authenticator()
                   ],
                 ),
               ); authenticated ? HomePage(auth: auth) : Authenticator();
