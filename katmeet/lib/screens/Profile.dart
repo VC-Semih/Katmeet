@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
@@ -31,7 +29,7 @@ class _Profile extends State<Profile> {
           UserRepository.getUserByEmail(email).then((user) => {
                 setState(() {
                   userModel = user;
-                  _loading = true;
+                  _loading = false;
                 })
               })
         });

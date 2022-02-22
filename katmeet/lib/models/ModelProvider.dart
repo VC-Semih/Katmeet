@@ -14,7 +14,6 @@
 */
 
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'package:katmeet/models/TypeAnimal.dart';
 import 'AnimalModel.dart';
 import 'PhotosModel.dart';
 import 'UserModel.dart';
@@ -28,7 +27,7 @@ export 'UserModelAnimalModel.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "9912c404a528cc72f39f36047f6d7e98";
+  String version = "cd0917135e19c7654eb91bb5de155347";
   @override
   List<ModelSchema> modelSchemas = [
     AnimalModel.schema,
@@ -39,7 +38,6 @@ class ModelProvider implements ModelProviderInterface {
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
-
 
   @override
   ModelType<Model> getModelTypeByModelName(String modelName) {

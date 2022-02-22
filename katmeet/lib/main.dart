@@ -10,7 +10,6 @@ import 'package:katmeet/screens/drawerScreen.dart';
 import 'package:katmeet/screens/home.dart';
 import 'amplifyconfiguration.dart';
 import 'screens/auth.dart';
-import 'screens/photos.dart';
 
 void main() {
   runApp(MyAppState());

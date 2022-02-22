@@ -46,7 +46,7 @@ class AnimalModel extends Model {
       this.description,
       this.birthdate,
       this.usermodels,
-      @required this.animalOwner,
+      this.animalOwner,
       this.photosAnimal});
 
   factory AnimalModel(
@@ -56,7 +56,7 @@ class AnimalModel extends Model {
       String description,
       DateTime birthdate,
       List<UserModelAnimalModel> usermodels,
-      @required UserModel animalOwner,
+      UserModel animalOwner,
       List<PhotosModel> photosAnimal}) {
     return AnimalModel._internal(
         id: id == null ? UUID.getUUID() : id,
@@ -119,7 +119,7 @@ class AnimalModel extends Model {
       String description,
       DateTime birthdate,
       List<UserModelAnimalModel> usermodels,
-      @required UserModel animalOwner,
+      UserModel animalOwner,
       List<PhotosModel> photosAnimal}) {
     return AnimalModel(
         id: id ?? this.id,
@@ -227,7 +227,7 @@ class AnimalModel extends Model {
 
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
         key: AnimalModel.ANIMALOWNER,
-        isRequired: true,
+        isRequired: false,
         targetName: "animalModelAnimalOwnerId",
         ofModelName: (UserModel).toString()));
 
