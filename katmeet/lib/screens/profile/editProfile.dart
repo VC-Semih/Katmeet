@@ -1,11 +1,19 @@
-
 import 'dart:ui';
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
+import '../capture.dart';
 import '../configuration.dart';
 import 'package:katmeet/auth_repository.dart';
+
+
+
+
+
+enum ImageSourceType { gallery, camera }
 
 
 class FormProfile extends StatefulWidget {
@@ -13,8 +21,64 @@ class FormProfile extends StatefulWidget {
   _FormProfile createState() => _FormProfile();
 }
 
-class _FormProfile extends State<FormProfile> {
+class _FormProfile extends State<FormProfile>  {
   UserModel userModel;
+  var imageFile;
+  final _picker = ImagePicker();
+
+  dynamic _openCameraView(BuildContext context) async {
+    try {
+      var cameras = await availableCameras();
+      if (cameras.length > 0) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Capture(camera: cameras.first)));
+      } else {
+        print("No cameras found");
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+  void _openGallery(BuildContext context) async {
+    var picture = await _picker.pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+
+
+  Future<void> _showSelectionDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("From where do you want to take the photo?"),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    GestureDetector(
+                      child: Text("Gallery"),
+                      onTap: () {
+                        _openGallery(context);
+                      },
+                    ),
+                    Padding(padding: EdgeInsets.all(8.0)),
+                    GestureDetector(
+                      child: Text("Camera"),
+                      onTap: () {
+                        _openCameraView(context);
+                      },
+                    )
+                  ],
+                ),
+              ));
+        });
+  }
+
 
   var theme1 = Colors.white;
   var theme2 = Color(0xff2E324F);
@@ -22,8 +86,6 @@ class _FormProfile extends State<FormProfile> {
   var black = Colors.black;
   bool switchColor = false;
 
-
-  
 
   @override
   Future<void> initState() {
@@ -46,32 +108,21 @@ class _FormProfile extends State<FormProfile> {
       appBar: AppBar(
         backgroundColor: theme1,
         elevation: 0.0,
-        leading: Icon(
-          Icons.arrow_back,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
           color: black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.favorite_border,
-              color: black,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 8.0, 12.0, 8.0),
-            child: Icon(
-              Icons.more_vert,
-              color: black,
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
+        padding:const EdgeInsets.fromLTRB(8.0, 40, 8.0, 100.0),
         child: Column(
           children: <Widget>[
             Stack(
               children: <Widget>[
+
                 CircleAvatar(
                   radius: 70,
                   child: ClipOval(child: Image.asset('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg', height: 150, width: 150, fit: BoxFit.cover,),),
@@ -82,7 +133,7 @@ class _FormProfile extends State<FormProfile> {
                   height: 40, width: 40,
                   child: new IconButton(
                     icon: new Icon(Icons.camera_alt),
-                    onPressed: () { },
+                    onPressed: () {  _showSelectionDialog(context);},
                   ),
                   decoration: BoxDecoration(
                       color: primaryGreen,
@@ -95,69 +146,16 @@ class _FormProfile extends State<FormProfile> {
               padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
               child: TextFormField(
                 decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.teal.shade100,
-                    border: OutlineInputBorder(),
-                    labelText: 'Username',
-                ),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a Username';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.teal.shade100,
-                  border: OutlineInputBorder(),
-                  labelText: 'Date of birth',
-                ),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a Username';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.teal.shade100,
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                ),
-                // The validator receives the text that the user has entered.
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter a Username';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
-              child: TextFormField(
-                decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.teal.shade100,
                   border: OutlineInputBorder(),
                   labelText: 'Phone',
+
                 ),
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter a Username';
+                    return 'Please enter a phone number';
                   }
                   return null;
                 },
@@ -175,7 +173,7 @@ class _FormProfile extends State<FormProfile> {
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter a Username';
+                    return 'Please enter an adress';
                   }
                   return null;
                 },
@@ -197,17 +195,15 @@ class _FormProfile extends State<FormProfile> {
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter a Username';
+                    return 'Please describe yourself';
                   }
                   return null;
                 },
               ),
             ),
 
-
-
             Card(
-              margin: EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
+              margin: EdgeInsets.symmetric(horizontal: 30.0,vertical: 5.0),
               clipBehavior: Clip.antiAlias,
               color: primaryGreen,
             ),
@@ -215,18 +211,10 @@ class _FormProfile extends State<FormProfile> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                height: 120,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                height: 100,
                 child: Row(
                   children: [
-                    Container(
-                      height: 60,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: primaryGreen,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Icon(Icons.favorite_border,color: Colors.white,),
-                    ),
                     SizedBox(width: 10,),
                     Expanded(
                       child: Container(
@@ -236,8 +224,7 @@ class _FormProfile extends State<FormProfile> {
                       ),
                     )
                   ],
-                )
-                ,
+                ),
                 decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40), )
@@ -250,4 +237,5 @@ class _FormProfile extends State<FormProfile> {
     );
   }
 }
+
 
