@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:katmeet/models/UserModel.dart';
+import 'package:katmeet/screens/profile/editProfile.dart';
 import 'package:katmeet/user_repository.dart';
 import 'configuration.dart';
 import 'package:katmeet/auth_repository.dart';
@@ -279,7 +280,12 @@ class _Profile extends State<Profile> {
                       child: Container(
                         height: 60,
                         decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(20)),
-                        child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
+                        child:OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> FormProfile()));
+                          },
+                          child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
+                        ),
                       ),
                     )
                   ],
