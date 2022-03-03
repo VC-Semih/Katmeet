@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
@@ -20,6 +21,8 @@ enum ImageSourceType { gallery, camera }
 class FormProfile extends StatefulWidget {
   @override
   _FormProfile createState() => _FormProfile();
+
+
 }
 
 class _FormProfile extends State<FormProfile>  {
@@ -32,6 +35,10 @@ class _FormProfile extends State<FormProfile>  {
   final phone = TextEditingController();
   final adresse = TextEditingController();
   final aboutme = TextEditingController();
+
+
+
+
 
   void _updateUserInfo() async{
 
@@ -116,37 +123,34 @@ class _FormProfile extends State<FormProfile>  {
       UserRepository.getUserByEmail(email).then((user) => {
         setState(() {
           userModel = user;
+
+          phone.text = userModel.phoneNumber;
+          adresse.text = userModel.adress;
+          aboutme.text = userModel.aboutMe;
+
         })
       })
     });
 
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+
+
+
+
   }
 
   @override
-  Widget build(BuildContext context) {
-  
-
-
-
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        backgroundColor: theme1,
-        elevation: 0.0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body:
-      Form(
-        key: _formKey,
-        child: Column(children:<Widget>[
+  Widget build(BuildContext context) => Scaffold(
+    body: Center(
+      child: ListView(
+        padding: EdgeInsets.all(32),
+        shrinkWrap: true,
+        reverse: true,
+        children: <Widget>[
+          Form(
+          key: _formKey,
+          child: Column(children:<Widget>[
             Stack(
               children: <Widget>[
                 CircleAvatar(
@@ -178,6 +182,9 @@ class _FormProfile extends State<FormProfile>  {
                   border: OutlineInputBorder(),
                   labelText: "Phone",
                 ),
+                onChanged: (text) {
+
+                },
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value.isEmpty) {
@@ -185,6 +192,7 @@ class _FormProfile extends State<FormProfile>  {
                   }
                   return null;
                 },
+
               ),
             ),
             Padding(
@@ -204,6 +212,7 @@ class _FormProfile extends State<FormProfile>  {
                   }
                   return null;
                 },
+                onSaved: (phone) {},
               ),
             ),
             Padding(
@@ -225,7 +234,6 @@ class _FormProfile extends State<FormProfile>  {
                 },
               ),
             ),
-
             Card(
               margin: EdgeInsets.symmetric(horizontal: 30.0,vertical: 5.0),
               clipBehavior: Clip.antiAlias,
@@ -246,9 +254,10 @@ class _FormProfile extends State<FormProfile>  {
                         decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(20)),
                         child:OutlinedButton(
                           onPressed: () {
-    if (_formKey.currentState.validate()) {
-      _updateUserInfo();
-    }
+                            if (_formKey.currentState.validate()) {
+                              _updateUserInfo();
+
+                            }
                           },
                           child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
                         ),
@@ -257,16 +266,16 @@ class _FormProfile extends State<FormProfile>  {
                   ],
                 ),
                 decoration: BoxDecoration(
-                    color: Colors.grey[200],
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40), )
                 ),
               ),
             )
           ],
-        ),
+          ),)
+        ].reversed.toList(),
       ),
-    );
-  }
+    ),
+  );
 }
 
 
