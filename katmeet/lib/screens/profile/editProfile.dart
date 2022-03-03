@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
@@ -22,9 +23,28 @@ class FormProfile extends StatefulWidget {
 }
 
 class _FormProfile extends State<FormProfile>  {
+
+
   UserModel userModel;
   var imageFile;
+  final _formKey = GlobalKey<FormState>();
   final _picker = ImagePicker();
+  final phone = TextEditingController();
+  final adresse = TextEditingController();
+  final aboutme = TextEditingController();
+
+  void _updateUserInfo() async{
+
+    UserModel newUser = userModel.copyWith(
+        id: userModel.id,
+        username: userModel.username,
+        email: userModel.email,
+        phoneNumber: phone.text.trim(),
+        adress: adresse.text.trim() ,
+        aboutMe: aboutme.text.trim(),
+    );
+    UserRepository.updateUser(newUser);
+  }
 
   dynamic _openCameraView(BuildContext context) async {
     try {
@@ -48,8 +68,6 @@ class _FormProfile extends State<FormProfile>  {
     });
     Navigator.of(context).pop();
   }
-
-
 
   Future<void> _showSelectionDialog(BuildContext context) {
     return showDialog(
@@ -80,11 +98,14 @@ class _FormProfile extends State<FormProfile>  {
   }
 
 
+
   var theme1 = Colors.white;
   var theme2 = Color(0xff2E324F);
   var white = Colors.white;
   var black = Colors.black;
   bool switchColor = false;
+
+
 
 
   @override
@@ -98,12 +119,18 @@ class _FormProfile extends State<FormProfile>  {
         })
       })
     });
+
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
   @override
   Widget build(BuildContext context) {
+  
+
+
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: theme1,
@@ -116,41 +143,40 @@ class _FormProfile extends State<FormProfile>  {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        padding:const EdgeInsets.fromLTRB(8.0, 40, 8.0, 100.0),
-        child: Column(
-          children: <Widget>[
+      body:
+      Form(
+        key: _formKey,
+        child: Column(children:<Widget>[
             Stack(
               children: <Widget>[
-
                 CircleAvatar(
                   radius: 70,
                   child: ClipOval(child: Image.asset('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg', height: 150, width: 150, fit: BoxFit.cover,),),
                 ),
                 Positioned(bottom: 1, right: 1 ,
                     child:
-                Container(
-                  height: 40, width: 40,
-                  child: new IconButton(
-                    icon: new Icon(Icons.camera_alt),
-                    onPressed: () {  _showSelectionDialog(context);},
-                  ),
-                  decoration: BoxDecoration(
-                      color: primaryGreen,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                ))
+                    Container(
+                      height: 40, width: 40,
+                      child: new IconButton(
+                        icon: new Icon(Icons.camera_alt),
+                        onPressed: () {  _showSelectionDialog(context);},
+                      ),
+                      decoration: BoxDecoration(
+                        color: primaryGreen,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                    ))
               ],
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
               child: TextFormField(
+                controller: phone,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.teal.shade100,
                   border: OutlineInputBorder(),
-                  labelText: 'Phone',
-
+                  labelText: "Phone",
                 ),
                 // The validator receives the text that the user has entered.
                 validator: (value) {
@@ -164,6 +190,7 @@ class _FormProfile extends State<FormProfile>  {
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
               child: TextFormField(
+                controller: adresse,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.teal.shade100,
@@ -182,10 +209,7 @@ class _FormProfile extends State<FormProfile>  {
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
               child: TextFormField(
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.newline,
-                minLines: 1,
-                maxLines: 5,
+                controller: aboutme,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.teal.shade100,
@@ -220,7 +244,14 @@ class _FormProfile extends State<FormProfile>  {
                       child: Container(
                         height: 60,
                         decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(20)),
-                        child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
+                        child:OutlinedButton(
+                          onPressed: () {
+    if (_formKey.currentState.validate()) {
+      _updateUserInfo();
+    }
+                          },
+                          child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
+                        ),
                       ),
                     )
                   ],
@@ -237,5 +268,6 @@ class _FormProfile extends State<FormProfile>  {
     );
   }
 }
+
 
 
