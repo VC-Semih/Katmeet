@@ -1,4 +1,6 @@
+import 'dart:math';
 import 'dart:ui';
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +12,6 @@ import 'package:katmeet/user_repository.dart';
 import '../capture.dart';
 import '../configuration.dart';
 import 'package:katmeet/auth_repository.dart';
-
-
-
-
 
 enum ImageSourceType { gallery, camera }
 
@@ -29,15 +27,12 @@ class _FormProfile extends State<FormProfile>  {
 
 
   UserModel userModel;
-  var imageFile;
+  PickedFile _imageFile;
   final _formKey = GlobalKey<FormState>();
-  final _picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker();
   final phone = TextEditingController();
   final adresse = TextEditingController();
   final aboutme = TextEditingController();
-
-
-
 
 
   void _updateUserInfo() async{
@@ -49,31 +44,30 @@ class _FormProfile extends State<FormProfile>  {
         phoneNumber: phone.text.trim(),
         adress: adresse.text.trim() ,
         aboutMe: aboutme.text.trim(),
+        profilePictureS3Key: _image.path
     );
     UserRepository.updateUser(newUser);
   }
 
-  dynamic _openCameraView(BuildContext context) async {
-    try {
-      var cameras = await availableCameras();
-      if (cameras.length > 0) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Capture(camera: cameras.first)));
-      } else {
-        print("No cameras found");
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
+
+
+  Future<File> takePhoto(ImageSource source) async {
+    final XFile image = await _picker.pickImage(source: source);
+    final File file = File(image.path);
+    return file;
   }
-  void _openGallery(BuildContext context) async {
-    var picture = await _picker.pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-    });
-    Navigator.of(context).pop();
+  File _image;
+
+  final _pickerImage = ImagePicker();
+  // Implementing the image picker
+  Future<void> _openImagePicker(ImageSource source) async {
+    final XFile pickedImage =
+    await _picker.pickImage(source: source);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
   }
 
   Future<void> _showSelectionDialog(BuildContext context) {
@@ -88,14 +82,14 @@ class _FormProfile extends State<FormProfile>  {
                     GestureDetector(
                       child: Text("Gallery"),
                       onTap: () {
-                        _openGallery(context);
+                        _openImagePicker(ImageSource.gallery);
                       },
                     ),
                     Padding(padding: EdgeInsets.all(8.0)),
                     GestureDetector(
                       child: Text("Camera"),
                       onTap: () {
-                        _openCameraView(context);
+                        takePhoto(ImageSource.camera);
                       },
                     )
                   ],
@@ -111,9 +105,6 @@ class _FormProfile extends State<FormProfile>  {
   var white = Colors.white;
   var black = Colors.black;
   bool switchColor = false;
-
-
-
 
   @override
   Future<void> initState() {
@@ -153,9 +144,17 @@ class _FormProfile extends State<FormProfile>  {
           child: Column(children:<Widget>[
             Stack(
               children: <Widget>[
+                _image != null ?
                 CircleAvatar(
                   radius: 70,
-                  child: ClipOval(child: Image.asset('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg', height: 150, width: 150, fit: BoxFit.cover,),),
+                  child: ClipOval(
+                    child: Image.file(_image,fit: BoxFit.fill)) ,
+                ):
+                CircleAvatar(
+                  radius: 70,
+                  child: ClipOval(
+                    child: Image.asset('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg', height: 150, width: 150, fit: BoxFit.cover,),
+                  ),
                 ),
                 Positioned(bottom: 1, right: 1 ,
                     child:
@@ -238,6 +237,9 @@ class _FormProfile extends State<FormProfile>  {
               margin: EdgeInsets.symmetric(horizontal: 30.0,vertical: 5.0),
               clipBehavior: Clip.antiAlias,
               color: primaryGreen,
+            ),
+            Card(
+
             ),
             Align(
               alignment: Alignment.bottomCenter,
