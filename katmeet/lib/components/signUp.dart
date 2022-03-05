@@ -76,8 +76,7 @@ class SignUpState extends State<SignUp> {
         child: ListView(
         shrinkWrap: true,
         reverse: true,
-        children: <Widget>[
-        Form(
+        children: <Widget>[Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
