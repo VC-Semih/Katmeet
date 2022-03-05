@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:flutter/services.dart';
 
 import 'dart:developer' as dev;
 
@@ -18,6 +19,16 @@ class SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+
+
+  @override
+  Future<void> initState() {
+    super.initState();
+
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
   //String _signUpError = "";
   //List<String> _signUpExceptions = [];
 
@@ -45,61 +56,67 @@ class SignInState extends State<SignIn> {
           .showSnackBar(SnackBar(content: Text("Error Signing in")));
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text('Sign in to Your Account',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 24)),
-                ),
-                SizedBox(height: 10.0),
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.blue.shade100,
-                      border: OutlineInputBorder(),
-                      labelText: 'Enter a Username',
-                      hintText: 'SnowFlake',
-                      icon: Icon(Icons.star)
-                  ),
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter a Username';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10.0),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.blue.shade100,
-                      border: OutlineInputBorder(),
-                      labelText: 'Enter a Password',
-                      hintText: '123-456-78',
-                      icon: Icon(Icons.star)
-                  ),
-                  obscureText: true,
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter a Password';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 30.0),
-                ElevatedButton(
+        resizeToAvoidBottomInset: false,
+        body: Center(
+        child: ListView(
+            padding: EdgeInsets.all(32),
+            shrinkWrap: true,
+            reverse: true,
+            children: <Widget>[
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text('Sign in to Your Account',
+                            style:
+                            TextStyle(fontWeight: FontWeight.w400, fontSize: 24)),
+                      ),
+                      SizedBox(height: 10.0),
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.blue.shade100,
+                            border: OutlineInputBorder(),
+                            labelText: 'Enter a Username',
+                            hintText: 'SnowFlake',
+                            icon: Icon(Icons.star)
+                        ),
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a Username';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 10.0),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.blue.shade100,
+                            border: OutlineInputBorder(),
+                            labelText: 'Enter a Password',
+                            hintText: '123-456-78',
+                            icon: Icon(Icons.star)
+                        ),
+                        obscureText: true,
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a Password';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30.0),
+                      ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             _signIn();
@@ -108,7 +125,11 @@ class SignInState extends State<SignIn> {
                         child: Text('SIGN IN'),
                         style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.lightBlueAccent)),
                       ),
-              ],
-            )));
+                    ],
+                  ))
+            ]
+        ),
+    ));
+
   }
 }

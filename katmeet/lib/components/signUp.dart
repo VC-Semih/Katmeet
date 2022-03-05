@@ -71,7 +71,13 @@ class SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Form(
+        resizeToAvoidBottomInset: false,
+        body: Center(
+        child: ListView(
+        shrinkWrap: true,
+        reverse: true,
+        children: <Widget>[
+        Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
@@ -132,7 +138,7 @@ class SignUpState extends State<SignUp> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(4),
                         child: Text('Create a New Account',
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 24)),
@@ -240,6 +246,9 @@ class SignUpState extends State<SignUp> {
                   ),
                 )
               ],
-            )));
+            ))
+        ]
+        ),
+    ));
   }
 }
