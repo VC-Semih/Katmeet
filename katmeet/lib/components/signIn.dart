@@ -56,7 +56,6 @@ class SignInState extends State<SignIn> {
           .showSnackBar(SnackBar(content: Text("Error Signing in")));
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
