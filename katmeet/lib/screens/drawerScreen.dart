@@ -2,7 +2,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:katmeet/screens/Profile.dart';
-import 'package:katmeet/screens/newPet.dart';
+import 'package:katmeet/screens/Animal/newPet.dart';
 import 'package:katmeet/screens/profile/editProfile.dart';
 import 'configuration.dart';
 

@@ -49,6 +49,7 @@ dependencies:
   font_awesome_flutter: ^9.2.0
   easy_widgets: ^0.0.7
   flutter_native_splash:
+  intl: ^0.17.0
 
 
 dev_dependencies:
