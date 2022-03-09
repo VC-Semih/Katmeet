@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:katmeet/models/ModelProvider.dart';
 import 'package:katmeet/models/UserModel.dart';
 
@@ -44,16 +45,18 @@ class NewPetState extends State<NewPet> {
   }
 
   DateTime currentDate = DateTime.now();
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: DateTime(1990),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
+        firstDate: DateTime(currentDate.year - 130),
+        lastDate: DateTime(currentDate.year + 1));
+    if (pickedDate != null && pickedDate != currentDate) {
       setState(() {
         currentDate = pickedDate;
       });
+    }
   }
 
   @override
@@ -169,19 +172,29 @@ class NewPetState extends State<NewPet> {
                         },
                       ),
                     ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
-                ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
+                    ),
+                    Text("Animal birthdate"),
                     Row(
                       children: [
-                        SizedBox(width: 10,),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Expanded(
                           child: Container(
                             height: 30,
-                            decoration: BoxDecoration(color: primaryGreen,borderRadius: BorderRadius.circular(40)),
-                            child:OutlinedButton(
-                              onPressed: ()  => _selectDate(context),
-                              child: Center(child: Text(currentDate.toString(),style: TextStyle(color: Colors.white,fontSize: 20),)),
+                            decoration: BoxDecoration(
+                                color: primaryGreen,
+                                borderRadius: BorderRadius.circular(40)),
+                            child: OutlinedButton(
+                              onPressed: () => _selectDate(context),
+                              child: Center(
+                                  child: Text(
+                                DateFormat("dd/MM/yyyy").format(currentDate).toString(),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              )),
                             ),
                           ),
                         )
@@ -211,6 +224,5 @@ class NewPetState extends State<NewPet> {
         ));
   }
 }
-
 
 // Create a Form widget.
