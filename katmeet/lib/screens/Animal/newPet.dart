@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/models/ModelProvider.dart';
 import 'package:katmeet/models/UserModel.dart';
 
@@ -211,6 +212,17 @@ class NewPetState extends State<NewPet> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
                             );
+                            AnimalRepository.createAnimal(
+                              type: _animalType,
+                              race: _race.text,
+                              description: _description.text,
+                              birthdate: currentDate,
+                              animalOwner: userModel,
+                            ).then((value) => {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Your animal has been added !')),
+                              )
+                            });
                           }
                         },
                         child: const Text('Submit'),
