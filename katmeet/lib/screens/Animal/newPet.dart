@@ -18,7 +18,6 @@ class NewPet extends StatefulWidget {
 
 class NewPetState extends State<NewPet> {
   UserModel userModel;
-  bool _loading;
 
   final _formKey = GlobalKey<FormState>();
   final _race = TextEditingController();
@@ -34,12 +33,10 @@ class NewPetState extends State<NewPet> {
   @override
   Future<void> initState() {
     super.initState();
-    _loading = true;
     AuthRepository.getEmailFromAttributes().then((email) => {
           UserRepository.getUserByEmail(email).then((user) => {
                 setState(() {
                   userModel = user;
-                  _loading = false;
                 })
               })
         });
