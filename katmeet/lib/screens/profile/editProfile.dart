@@ -28,6 +28,8 @@ class _FormProfile extends State<FormProfile>  {
 
   UserModel userModel;
   PickedFile _imageFile;
+  File _image;
+
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
   final phone = TextEditingController();
@@ -49,16 +51,16 @@ class _FormProfile extends State<FormProfile>  {
     UserRepository.updateUser(newUser);
   }
 
-
-
   Future<File> takePhoto(ImageSource source) async {
     final XFile image = await _picker.pickImage(source: source);
     final File file = File(image.path);
-    return file;
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
   }
-  File _image;
 
-  final _pickerImage = ImagePicker();
   // Implementing the image picker
   Future<void> _openImagePicker(ImageSource source) async {
     final XFile pickedImage =
@@ -125,10 +127,6 @@ class _FormProfile extends State<FormProfile>  {
 
     SystemChannels.textInput.invokeMethod('TextInput.hide');
 
-
-
-
-
   }
 
   @override
@@ -147,8 +145,7 @@ class _FormProfile extends State<FormProfile>  {
                 _image != null ?
                 CircleAvatar(
                   radius: 70,
-                  child: ClipOval(
-                    child: Image.file(_image,fit: BoxFit.fill)) ,
+                  backgroundImage: FileImage(_image),
                 ):
                 CircleAvatar(
                   radius: 70,
