@@ -149,9 +149,7 @@ class _FormProfile extends State<FormProfile>  {
                 ):
                 CircleAvatar(
                   radius: 70,
-                  child: ClipOval(
-                    child: Image.asset('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg', height: 150, width: 150, fit: BoxFit.cover,),
-                  ),
+                  backgroundImage: NetworkImage('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg'),
                 ),
                 Positioned(bottom: 1, right: 1 ,
                     child:
