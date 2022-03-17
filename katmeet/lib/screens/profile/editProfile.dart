@@ -1,12 +1,16 @@
 import 'dart:math';
 import 'dart:ui';
 import 'dart:io';
+import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
 import '../capture.dart';
@@ -18,8 +22,8 @@ enum ImageSourceType { gallery, camera }
 
 class FormProfile extends StatefulWidget {
   @override
-  _FormProfile createState() => _FormProfile();
-
+  _FormProfile createState() => _FormProfile(_storageService);
+  final _storageService = new StorageService();
 
 }
 
@@ -27,8 +31,9 @@ class _FormProfile extends State<FormProfile>  {
 
 
   UserModel userModel;
-  PickedFile _imageFile;
   File _image;
+  String _s3key;
+  final StorageService _storageService;
 
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
@@ -36,18 +41,30 @@ class _FormProfile extends State<FormProfile>  {
   final adresse = TextEditingController();
   final aboutme = TextEditingController();
 
+  _FormProfile(this._storageService);
 
   void _updateUserInfo() async{
-
-    UserModel newUser = userModel.copyWith(
+    UserModel newUser;
+    if(_s3key.isNotEmpty) {
+      newUser = userModel.copyWith(
         id: userModel.id,
         username: userModel.username,
         email: userModel.email,
         phoneNumber: phone.text.trim(),
-        adress: adresse.text.trim() ,
+        adress: adresse.text.trim(),
         aboutMe: aboutme.text.trim(),
-        profilePictureS3Key: _image.path
-    );
+        profilePictureS3Key: _s3key,
+      );
+    }else{
+      newUser = userModel.copyWith(
+          id: userModel.id,
+          username: userModel.username,
+          email: userModel.email,
+          phoneNumber: phone.text.trim(),
+          adress: adresse.text.trim(),
+          aboutMe: aboutme.text.trim(),
+      );
+    }
     UserRepository.updateUser(newUser);
   }
 
@@ -120,11 +137,10 @@ class _FormProfile extends State<FormProfile>  {
           phone.text = userModel.phoneNumber;
           adresse.text = userModel.adress;
           aboutme.text = userModel.aboutMe;
-
+          _storageService.getImageByS3Key(userModel.profilePictureS3Key);
         })
       })
     });
-
     SystemChannels.textInput.invokeMethod('TextInput.hide');
 
   }
@@ -143,14 +159,11 @@ class _FormProfile extends State<FormProfile>  {
             Stack(
               children: <Widget>[
                 _image != null ?
-                CircleAvatar(
-                  radius: 70,
-                  backgroundImage: FileImage(_image),
-                ):
-                CircleAvatar(
-                  radius: 70,
-                  backgroundImage: NetworkImage('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg'),
-                ),
+                  CircleAvatar(
+                    radius: 70,
+                    backgroundImage: FileImage(_image),
+                  ):
+                _profilePicture(),
                 Positioned(bottom: 1, right: 1 ,
                     child:
                     Container(
@@ -252,8 +265,37 @@ class _FormProfile extends State<FormProfile>  {
                         child:OutlinedButton(
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
-                              _updateUserInfo();
-
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text("Uploading...")
+                              ));
+                              if(_image != null){ //Only if image is not null we upload
+                                var extension = _image.path.substring(_image.path.length - 3, _image.path.length);
+                                var key = new DateTime.now().microsecondsSinceEpoch.toString() + ".$extension";
+                                S3UploadFileOptions options = S3UploadFileOptions(accessLevel: StorageAccessLevel.protected);
+                                try {
+                                  File local = File(_image.path);
+                                  Amplify.Storage.uploadFile(key: key, local: local, options: options).then((UploadFileResult result) {
+                                    print(result.key);
+                                    setState(() {
+                                      _s3key = result.key;
+                                    });
+                                    _updateUserInfo();
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text("Uploaded !")
+                                    ));
+                                  }).catchError(print);
+                                } on Exception catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      content: Text("Something went wrong !")
+                                  ));
+                                  print(e);
+                                }
+                              }else{
+                                _updateUserInfo();
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text("Uploaded !")
+                                ));
+                              }
                             }
                           },
                           child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
@@ -273,7 +315,43 @@ class _FormProfile extends State<FormProfile>  {
       ),
     ),
   );
+  Widget _profilePicture() {
+    return StreamBuilder(
+        stream: _storageService.imageUrlController.stream,
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          if(snapshot.hasData){
+            if(snapshot.data.length != 0) {
+              return CachedNetworkImage(
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => new Icon(Icons.error),
+                fit: BoxFit.contain,
+                imageUrl: snapshot.data,
+                imageBuilder: (context, imageProvider) {
+                  return CircleAvatar(
+                    radius: 70,
+                    backgroundImage: imageProvider,
+                  );
+                },
+              );
+            }else{
+              return CircleAvatar(
+                radius: 70,
+                backgroundImage: NetworkImage('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg'),
+              );
+            }
+          }else{
+            return CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: SizedBox(
+                width: 70,
+                height: 70,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        }
+    );
+  }
 }
-
 
 
