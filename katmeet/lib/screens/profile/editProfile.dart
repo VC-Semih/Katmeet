@@ -137,7 +137,9 @@ class _FormProfile extends State<FormProfile>  {
           phone.text = userModel.phoneNumber;
           adresse.text = userModel.adress;
           aboutme.text = userModel.aboutMe;
-          _storageService.getImageByS3Key(userModel.profilePictureS3Key);
+          if(userModel.profilePictureS3Key != null) {
+            _storageService.getImageByS3Key(userModel.profilePictureS3Key);
+          }
         })
       })
     });
@@ -319,38 +321,27 @@ class _FormProfile extends State<FormProfile>  {
     return StreamBuilder(
         stream: _storageService.imageUrlController.stream,
         builder: (context, AsyncSnapshot<String> snapshot) {
-          if(snapshot.hasData){
-            if(snapshot.data.length != 0) {
-              return CachedNetworkImage(
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => new Icon(Icons.error),
-                fit: BoxFit.contain,
-                imageUrl: snapshot.data,
-                imageBuilder: (context, imageProvider) {
-                  return CircleAvatar(
-                    radius: 70,
-                    backgroundImage: imageProvider,
-                  );
-                },
-              );
-            }else{
-              return CircleAvatar(
-                radius: 70,
-                backgroundImage: NetworkImage('https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg'),
-              );
-            }
-          }else{
+          if (snapshot.hasData) {
+            return CachedNetworkImage(
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => new Icon(Icons.error),
+              fit: BoxFit.contain,
+              imageUrl: snapshot.data,
+              imageBuilder: (context, imageProvider) {
+                return CircleAvatar(
+                  radius: 70,
+                  backgroundImage: imageProvider,
+                );
+              },
+            );
+          } else {
             return CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: SizedBox(
-                width: 70,
-                height: 70,
-                child: CircularProgressIndicator(),
-              ),
+              radius: 70,
+              backgroundImage: NetworkImage(
+                  'https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg'),
             );
           }
-        }
-    );
+        });
   }
 }
 
