@@ -45,7 +45,7 @@ class _FormProfile extends State<FormProfile>  {
 
   void _updateUserInfo() async{
     UserModel newUser;
-    if(_s3key.isNotEmpty) {
+    if(_s3key != null) {
       newUser = userModel.copyWith(
         id: userModel.id,
         username: userModel.username,
@@ -159,7 +159,8 @@ class _FormProfile extends State<FormProfile>  {
           key: _formKey,
           child: Column(children:<Widget>[
             Stack(
-              children: <Widget>[
+              children:
+              <Widget>[
                 _image != null ?
                   CircleAvatar(
                     radius: 70,
