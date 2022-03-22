@@ -2,6 +2,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:katmeet/auth_repository.dart';
+import 'package:katmeet/screens/Animal/pets.dart';
 import 'package:katmeet/screens/Profile.dart';
 import 'package:katmeet/screens/Animal/newPet.dart';
 import 'package:katmeet/screens/profile/editProfile.dart';
@@ -66,6 +67,24 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 },
                 child: Text(
                   'Add pet', //title
+                  textAlign: TextAlign.end,
+                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                  //aligment
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              SizedBox(width: 10,),
+              Icon(FontAwesomeIcons.paw,color: Colors.white,size: 30,),
+              SizedBox(width: 10,),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyPets()));
+                },
+                child: Text(
+                  'Pets', //title
                   textAlign: TextAlign.end,
                   style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
                   //aligment

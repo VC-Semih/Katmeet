@@ -1,7 +1,9 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/models/AnimalModel.dart';
+import 'package:katmeet/models/ModelProvider.dart';
 import 'package:katmeet/models/UserModel.dart';
 
 import '../../auth_repository.dart';
@@ -23,19 +25,20 @@ class MyPetState extends State<MyPets> {
 
   @override
   Future<void> initState() {
-    super.initState();
+
     AuthRepository.getEmailFromAttributes().then((email) => {
       UserRepository.getUserByEmail(email).then((user) => {
-        userModel = user,
+        AnimalRepository.getAnimalsByOwner(user).then((animals) => {
+        print(animals),
+        }),
       }),
-    AnimalRepository.getAnimalsByOwner(userModel).then((animals) => {
-    print(animals)
-    })
     });
+    super.initState();
 
-
+    Future.delayed(Duration(seconds: 5), (){
+      print("Executed after 5 seconds");
+    });
   }
-
 
 
   @override
