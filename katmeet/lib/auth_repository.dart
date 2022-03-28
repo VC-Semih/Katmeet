@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 
 class AuthRepository {
@@ -33,6 +34,13 @@ class AuthRepository {
       return session.isSignedIn ? (await _getUserIdFromAttributes()) : null;
     } on Exception catch (e) {
       throw e;
+    }
+  }
+  static Future<String> signOut() async {
+    try {
+      await Amplify.Auth.signOut();
+    } on AuthException catch (e) {
+      print(e.message);
     }
   }
 }

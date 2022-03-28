@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/screens/profile/editProfile.dart';
 import 'package:katmeet/user_repository.dart';
@@ -9,18 +11,22 @@ import 'package:katmeet/auth_repository.dart';
 
 class Profile extends StatefulWidget {
   @override
-  _Profile createState() => _Profile();
+  _Profile createState() => _Profile(_storageService);
+  final _storageService = new StorageService();
 }
 
 class _Profile extends State<Profile> {
   UserModel userModel;
   bool _loading;
+  final StorageService _storageService;
 
   var theme1 = Colors.white;
   var theme2 = Color(0xff2E324F);
   var white = Colors.white;
   var black = Colors.black;
   bool switchColor = false;
+
+  _Profile(this._storageService);
 
   @override
   Future<void> initState() {
@@ -31,9 +37,14 @@ class _Profile extends State<Profile> {
                 setState(() {
                   userModel = user;
                   _loading = false;
+                  if(userModel.profilePictureS3Key != null) {
+                    _storageService.getImageByS3Key(userModel.profilePictureS3Key);
+                  }
                 })
               })
         });
+
+
   }
 
   @override
@@ -75,12 +86,7 @@ class _Profile extends State<Profile> {
                   children: <Widget>[
                     CircleAvatar(
                       backgroundColor: primaryGreen,
-                      child: CircleAvatar(
-                        radius: 55,
-                        backgroundImage: NetworkImage(
-                          "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
-                        ),
-                      ),
+                      child: _profilePicture(),
                       radius: 60,
                     ),
                     Container(
@@ -302,6 +308,32 @@ class _Profile extends State<Profile> {
       ),
     );
   }
+  Widget _profilePicture() {
+    return StreamBuilder(
+        stream: _storageService.imageUrlController.stream,
+        builder: (context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.hasData) {
+            return CachedNetworkImage(
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => new Icon(Icons.error),
+              fit: BoxFit.contain,
+              imageUrl: snapshot.data,
+              imageBuilder: (context, imageProvider) {
+                return CircleAvatar(
+                  radius: 70,
+                  backgroundImage: imageProvider,
+                );
+              },
+            );
+          } else {
+            return CircleAvatar(
+              radius: 70,
+              backgroundImage: NetworkImage(
+                  'https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg'),
+            );
+          }
+        });
+  }
 }
 
 Widget loadingWidget(_loading) {
@@ -312,3 +344,4 @@ Widget loadingWidget(_loading) {
             child: CircularProgressIndicator()
         ));
 }
+
