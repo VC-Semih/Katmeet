@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/auth_repository.dart';
 import 'package:katmeet/models/ModelProvider.dart';
 import 'package:katmeet/photo_repository.dart';
@@ -13,19 +14,24 @@ import 'package:katmeet/user_repository.dart';
 // A screen that allows users to take a picture using a given camera.
 class Capture extends StatefulWidget {
   final CameraDescription camera;
+  final String animalModelID;
 
   const Capture({
     Key key,
     @required this.camera,
+    this.animalModelID,
   }) : super(key: key);
 
   @override
-  CaptureState createState() => CaptureState();
+  CaptureState createState() => CaptureState(animalModelID);
 }
 
 class CaptureState extends State<Capture> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
+  final String _animalModelID;
+
+  CaptureState(this._animalModelID);
 
   _toast(context, message) {
     Scaffold.of(context).hideCurrentSnackBar();
@@ -93,7 +99,7 @@ class CaptureState extends State<Capture> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    DisplayPictureScreen(imagePath: file.path),
+                    DisplayPictureScreen(imagePath: file.path, animalModelID: _animalModelID,),
               ),
             );
           } on Exception catch (e) {
@@ -109,8 +115,9 @@ class CaptureState extends State<Capture> {
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
+  final String animalModelID;
 
-  const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
+  const DisplayPictureScreen({Key key, this.imagePath, @required this.animalModelID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -131,13 +138,7 @@ class DisplayPictureScreen extends StatelessWidget {
           try {
             File local = File(imagePath);
             Amplify.Storage.uploadFile(key: key, local: local, options: options).then((UploadFileResult result) {
-              /*AuthRepository.getEmailFromAttributes().then((String email) => {
-                    UserRepository.getUserByEmail(email).then((UserModel userObject) => {
-                          PhotoRepository.createPhoto(s3Key: result.key, userID: userObject.id).then((PhotosModel photoObject) => {
-                            print(photoObject)
-                          })
-                    })
-              });*/
+            PhotoRepository.createPhoto(s3Key: key, animalID: animalModelID);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text("Your photo has been uploaded ! ")
               ));

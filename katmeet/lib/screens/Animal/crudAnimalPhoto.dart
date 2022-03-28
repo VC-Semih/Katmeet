@@ -8,6 +8,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/AnimalModel.dart';
+import 'package:katmeet/models/PhotosModel.dart';
 import 'package:katmeet/widget/refresh_widget.dart';
 
 import '../../photo_repository.dart';
@@ -44,7 +45,7 @@ class CrudAnimalPhotoState extends State<CrudAnimalPhoto> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Capture(camera: cameras.first)));
+                builder: (context) => Capture(camera: cameras.first, animalModelID: _animalModel.id,)));
       } else {
         print("No cameras found");
       }
@@ -63,7 +64,14 @@ class CrudAnimalPhotoState extends State<CrudAnimalPhoto> {
   Future loadList() async {
     keyRefresh.currentState?.show();
     await Future.delayed(Duration(milliseconds: 1000));
-    _storageService.getImages();
+    List<PhotosModel> photos = await PhotoRepository.getPhotosByAnimalID(_animalModel.id);
+    List<String> s3keys = [];
+    if(photos != null) {
+      await photos.forEach((element) {
+        s3keys.add(element.s3key);
+      });
+    }
+    _storageService.getImagesByS3KeyList(s3keys);
   }
 
   @override
