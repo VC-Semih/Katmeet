@@ -72,22 +72,6 @@ class NewPetState extends State<NewPet> {
               Navigator.pop(context);
             },
           ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.favorite_border,
-                color: black,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 8.0, 12.0, 8.0),
-              child: Icon(
-                Icons.more_vert,
-                color: black,
-              ),
-            ),
-          ],
         ),
         body: Center(
           child: ListView(
@@ -100,7 +84,7 @@ class NewPetState extends State<NewPet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Animal type"),
+                    Text("Your adorable pet is a :"),
                     Row(children: <Widget>[
                       Expanded(
                           child: ListTile(
@@ -174,7 +158,10 @@ class NewPetState extends State<NewPet> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
                     ),
-                    Text("Animal birthdate"),
+                    Text("Birthdate :"),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
+                    ),
                     Row(
                       children: [
                         SizedBox(

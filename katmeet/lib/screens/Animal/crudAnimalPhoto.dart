@@ -13,6 +13,7 @@ import 'package:katmeet/widget/refresh_widget.dart';
 
 import '../../photo_repository.dart';
 import '../capture.dart';
+import '../configuration.dart';
 import '../photo_display.dart';
 
 class CrudAnimalPhoto extends StatefulWidget {
@@ -79,7 +80,7 @@ class CrudAnimalPhotoState extends State<CrudAnimalPhoto> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () => _openCameraView(context),
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: primaryGreen,
           tooltip: 'Capture a photo',
           child: Icon(Icons.add_a_photo),
         ),
@@ -94,22 +95,6 @@ class CrudAnimalPhotoState extends State<CrudAnimalPhoto> {
               Navigator.pop(context);
             },
           ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.favorite_border,
-                color: black,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 8.0, 12.0, 8.0),
-              child: Icon(
-                Icons.more_vert,
-                color: black,
-              ),
-            ),
-          ],
         ),
         body: Container(child: _galleryGrid()));
   }
@@ -156,7 +141,7 @@ class CrudAnimalPhotoState extends State<CrudAnimalPhoto> {
                                 openWithTap: true,
                                 menuItems: <FocusedMenuItem>[
                                   FocusedMenuItem(
-                                      title: Text("Open"),
+                                      title: Text("View"),
                                       trailingIcon: Icon(Icons.open_in_new),
                                       onPressed: () {
                                         Navigator.push(
@@ -169,14 +154,6 @@ class CrudAnimalPhotoState extends State<CrudAnimalPhoto> {
                                                             .elementAt(
                                                                 index))));
                                       }),
-                                  FocusedMenuItem(
-                                      title: Text("Share"),
-                                      trailingIcon: Icon(Icons.share),
-                                      onPressed: () {}),
-                                  FocusedMenuItem(
-                                      title: Text("Favorite"),
-                                      trailingIcon: Icon(Icons.favorite_border),
-                                      onPressed: () {}),
                                   FocusedMenuItem(
                                       title: Text(
                                         "Delete",
