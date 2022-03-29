@@ -20,13 +20,13 @@ class AnimalRepository {
       String race,
       String description,
       DateTime birthdate,
-      UserModel animalOwner}) async {
+      String animalOwnerId}) async {
     final newAnimal = new AnimalModel(
         type: type,
         race: race,
         description: description,
         birthdate: birthdate,
-        animalOwner: animalOwner);
+        animalOwner: animalOwnerId);
     try {
       await Amplify.DataStore.save(newAnimal);
       return newAnimal;
@@ -36,10 +36,10 @@ class AnimalRepository {
   }
 
   static Future<List<AnimalModel>> getAnimalsByOwner(
-      UserModel animalOwner) async {
+      String animalOwnerId) async {
     try {
       final animals = await Amplify.DataStore.query(AnimalModel.classType,
-          where: AnimalModel.ANIMALOWNER.eq(animalOwner));
+          where: AnimalModel.ANIMALOWNER.eq(animalOwnerId));
       return animals.isNotEmpty ? animals : null;
     } on Exception catch (e) {
       throw e;

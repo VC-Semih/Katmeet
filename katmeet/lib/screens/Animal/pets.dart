@@ -28,9 +28,6 @@ class MyPetState extends State<MyPets> {
       UserRepository.getUserByEmail(email).then((user) => {
         userModel = user,
       }),
-    AnimalRepository.getAnimalsByOwner(userModel).then((animals) => {
-    print(animals)
-    })
     });
 
 

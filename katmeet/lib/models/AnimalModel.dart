@@ -28,7 +28,7 @@ class AnimalModel extends Model {
   final String description;
   final DateTime birthdate;
   final List<UserModelAnimalModel> usermodels;
-  final UserModel animalOwner;
+  final String animalOwner;
   final List<PhotosModel> photosAnimal;
 
   @override
@@ -56,7 +56,7 @@ class AnimalModel extends Model {
       String description,
       DateTime birthdate,
       List<UserModelAnimalModel> usermodels,
-      UserModel animalOwner,
+      String animalOwner,
       List<PhotosModel> photosAnimal}) {
     return AnimalModel._internal(
         id: id == null ? UUID.getUUID() : id,
@@ -105,8 +105,7 @@ class AnimalModel extends Model {
     buffer.write("birthdate=" +
         (birthdate != null ? birthdate.toDateTimeIso8601String() : "null") +
         ", ");
-    buffer.write("animalOwner=" +
-        (animalOwner != null ? animalOwner.toString() : "null"));
+    buffer.write("animalOwner=" + animalOwner);
     buffer.write("}");
 
     return buffer.toString();
@@ -119,7 +118,7 @@ class AnimalModel extends Model {
       String description,
       DateTime birthdate,
       List<UserModelAnimalModel> usermodels,
-      UserModel animalOwner,
+      String animalOwner,
       List<PhotosModel> photosAnimal}) {
     return AnimalModel(
         id: id ?? this.id,
@@ -144,10 +143,7 @@ class AnimalModel extends Model {
                     new Map<String, dynamic>.from(e)))
                 .toList()
             : null,
-        animalOwner = json['animalOwner'] != null
-            ? UserModel.fromJson(
-                new Map<String, dynamic>.from(json['animalOwner']))
-            : null,
+        animalOwner = json['animalOwner'],
         photosAnimal = json['photosAnimal'] is List
             ? (json['photosAnimal'] as List)
                 .map((e) =>
@@ -162,7 +158,7 @@ class AnimalModel extends Model {
         'description': description,
         'birthdate': birthdate?.toDateTimeIso8601String(),
         'usermodels': usermodels?.map((e) => e?.toJson()),
-        'animalOwner': animalOwner?.toJson(),
+        'animalOwner': animalOwner,
         'photosAnimal': photosAnimal?.map((e) => e?.toJson())
       };
 
@@ -175,10 +171,7 @@ class AnimalModel extends Model {
       fieldName: "usermodels",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
           ofModelName: (UserModelAnimalModel).toString()));
-  static final QueryField ANIMALOWNER = QueryField(
-      fieldName: "animalOwner",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (UserModel).toString()));
+  static final QueryField ANIMALOWNER = QueryField(fieldName: "animalOwner");
   static final QueryField PHOTOSANIMAL = QueryField(
       fieldName: "photosAnimal",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
@@ -225,11 +218,10 @@ class AnimalModel extends Model {
         ofModelName: (UserModelAnimalModel).toString(),
         associatedKey: UserModelAnimalModel.ANIMALMODEL));
 
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
         key: AnimalModel.ANIMALOWNER,
         isRequired: false,
-        targetName: "animalModelAnimalOwnerId",
-        ofModelName: (UserModel).toString()));
+        ofType: ModelFieldType(ModelFieldTypeEnum.string)));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
         key: AnimalModel.PHOTOSANIMAL,

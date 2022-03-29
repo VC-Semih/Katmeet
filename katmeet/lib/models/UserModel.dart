@@ -29,6 +29,7 @@ class UserModel extends Model {
   final String aboutMe;
   final String phoneNumber;
   final String adress;
+  final List<AnimalModel> ownedAnimals;
   final List<UserModelAnimalModel> likedAnimals;
 
   @override
@@ -47,6 +48,7 @@ class UserModel extends Model {
       this.aboutMe,
       this.phoneNumber,
       this.adress,
+      this.ownedAnimals,
       this.likedAnimals});
 
   factory UserModel(
@@ -57,6 +59,7 @@ class UserModel extends Model {
       String aboutMe,
       String phoneNumber,
       String adress,
+      List<AnimalModel> ownedAnimals,
       List<UserModelAnimalModel> likedAnimals}) {
     return UserModel._internal(
         id: id == null ? UUID.getUUID() : id,
@@ -66,6 +69,9 @@ class UserModel extends Model {
         aboutMe: aboutMe,
         phoneNumber: phoneNumber,
         adress: adress,
+        ownedAnimals: ownedAnimals != null
+            ? List.unmodifiable(ownedAnimals)
+            : ownedAnimals,
         likedAnimals: likedAnimals != null
             ? List.unmodifiable(likedAnimals)
             : likedAnimals);
@@ -86,6 +92,7 @@ class UserModel extends Model {
         aboutMe == other.aboutMe &&
         phoneNumber == other.phoneNumber &&
         adress == other.adress &&
+        DeepCollectionEquality().equals(ownedAnimals, other.ownedAnimals) &&
         DeepCollectionEquality().equals(likedAnimals, other.likedAnimals);
   }
 
@@ -117,6 +124,7 @@ class UserModel extends Model {
       String aboutMe,
       String phoneNumber,
       String adress,
+      List<AnimalModel> ownedAnimals,
       List<UserModelAnimalModel> likedAnimals}) {
     return UserModel(
         id: id ?? this.id,
@@ -126,6 +134,7 @@ class UserModel extends Model {
         aboutMe: aboutMe ?? this.aboutMe,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         adress: adress ?? this.adress,
+        ownedAnimals: ownedAnimals ?? this.ownedAnimals,
         likedAnimals: likedAnimals ?? this.likedAnimals);
   }
 
@@ -137,6 +146,12 @@ class UserModel extends Model {
         aboutMe = json['aboutMe'],
         phoneNumber = json['phoneNumber'],
         adress = json['adress'],
+        ownedAnimals = json['ownedAnimals'] is List
+            ? (json['ownedAnimals'] as List)
+                .map((e) =>
+                    AnimalModel.fromJson(new Map<String, dynamic>.from(e)))
+                .toList()
+            : null,
         likedAnimals = json['likedAnimals'] is List
             ? (json['likedAnimals'] as List)
                 .map((e) => UserModelAnimalModel.fromJson(
@@ -152,6 +167,7 @@ class UserModel extends Model {
         'aboutMe': aboutMe,
         'phoneNumber': phoneNumber,
         'adress': adress,
+        'ownedAnimals': ownedAnimals?.map((e) => e?.toJson()),
         'likedAnimals': likedAnimals?.map((e) => e?.toJson())
       };
 
@@ -163,6 +179,10 @@ class UserModel extends Model {
   static final QueryField ABOUTME = QueryField(fieldName: "aboutMe");
   static final QueryField PHONENUMBER = QueryField(fieldName: "phoneNumber");
   static final QueryField ADRESS = QueryField(fieldName: "adress");
+  static final QueryField OWNEDANIMALS = QueryField(
+      fieldName: "ownedAnimals",
+      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
+          ofModelName: (AnimalModel).toString()));
   static final QueryField LIKEDANIMALS = QueryField(
       fieldName: "likedAnimals",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
@@ -212,6 +232,12 @@ class UserModel extends Model {
         key: UserModel.ADRESS,
         isRequired: false,
         ofType: ModelFieldType(ModelFieldTypeEnum.string)));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
+        key: UserModel.OWNEDANIMALS,
+        isRequired: false,
+        ofModelName: (AnimalModel).toString(),
+        associatedKey: AnimalModel.ANIMALOWNER));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
         key: UserModel.LIKEDANIMALS,
