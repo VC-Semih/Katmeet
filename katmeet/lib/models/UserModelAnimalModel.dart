@@ -22,8 +22,8 @@ import 'package:flutter/foundation.dart';
 class UserModelAnimalModel extends Model {
   static const classType = const UserModelAnimalModelType();
   final String id;
-  final UserModel usermodel;
   final AnimalModel animalmodel;
+  final UserModel usermodel;
 
   @override
   getInstanceType() => classType;
@@ -35,17 +35,17 @@ class UserModelAnimalModel extends Model {
 
   const UserModelAnimalModel._internal(
       {@required this.id,
-      @required this.usermodel,
-      @required this.animalmodel});
+      @required this.animalmodel,
+      @required this.usermodel});
 
   factory UserModelAnimalModel(
       {@required String id,
-      @required UserModel usermodel,
-      @required AnimalModel animalmodel}) {
+      @required AnimalModel animalmodel,
+      @required UserModel usermodel}) {
     return UserModelAnimalModel._internal(
         id: id == null ? UUID.getUUID() : id,
-        usermodel: usermodel,
-        animalmodel: animalmodel);
+        animalmodel: animalmodel,
+        usermodel: usermodel);
   }
 
   bool equals(Object other) {
@@ -57,8 +57,8 @@ class UserModelAnimalModel extends Model {
     if (identical(other, this)) return true;
     return other is UserModelAnimalModel &&
         id == other.id &&
-        usermodel == other.usermodel &&
-        animalmodel == other.animalmodel;
+        animalmodel == other.animalmodel &&
+        usermodel == other.usermodel;
   }
 
   @override
@@ -70,11 +70,11 @@ class UserModelAnimalModel extends Model {
 
     buffer.write("UserModelAnimalModel {");
     buffer.write("id=" + id + ", ");
-    buffer.write("usermodel=" +
-        (usermodel != null ? usermodel.toString() : "null") +
-        ", ");
     buffer.write("animalmodel=" +
-        (animalmodel != null ? animalmodel.toString() : "null"));
+        (animalmodel != null ? animalmodel.toString() : "null") +
+        ", ");
+    buffer.write(
+        "usermodel=" + (usermodel != null ? usermodel.toString() : "null"));
     buffer.write("}");
 
     return buffer.toString();
@@ -82,40 +82,40 @@ class UserModelAnimalModel extends Model {
 
   UserModelAnimalModel copyWith(
       {@required String id,
-      @required UserModel usermodel,
-      @required AnimalModel animalmodel}) {
+      @required AnimalModel animalmodel,
+      @required UserModel usermodel}) {
     return UserModelAnimalModel(
         id: id ?? this.id,
-        usermodel: usermodel ?? this.usermodel,
-        animalmodel: animalmodel ?? this.animalmodel);
+        animalmodel: animalmodel ?? this.animalmodel,
+        usermodel: usermodel ?? this.usermodel);
   }
 
   UserModelAnimalModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        usermodel = json['usermodel'] != null
-            ? UserModel.fromJson(
-                new Map<String, dynamic>.from(json['usermodel']))
-            : null,
         animalmodel = json['animalmodel'] != null
             ? AnimalModel.fromJson(
                 new Map<String, dynamic>.from(json['animalmodel']))
+            : null,
+        usermodel = json['usermodel'] != null
+            ? UserModel.fromJson(
+                new Map<String, dynamic>.from(json['usermodel']))
             : null;
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'usermodel': usermodel?.toJson(),
-        'animalmodel': animalmodel?.toJson()
+        'animalmodel': animalmodel?.toJson(),
+        'usermodel': usermodel?.toJson()
       };
 
   static final QueryField ID = QueryField(fieldName: "userModelAnimalModel.id");
-  static final QueryField USERMODEL = QueryField(
-      fieldName: "usermodel",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (UserModel).toString()));
   static final QueryField ANIMALMODEL = QueryField(
       fieldName: "animalmodel",
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
           ofModelName: (AnimalModel).toString()));
+  static final QueryField USERMODEL = QueryField(
+      fieldName: "usermodel",
+      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
+          ofModelName: (UserModel).toString()));
   static var schema =
       Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "UserModelAnimalModel";
@@ -139,16 +139,16 @@ class UserModelAnimalModel extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
-        key: UserModelAnimalModel.USERMODEL,
-        isRequired: true,
-        targetName: "usermodelID",
-        ofModelName: (UserModel).toString()));
-
-    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
         key: UserModelAnimalModel.ANIMALMODEL,
         isRequired: true,
         targetName: "animalmodelID",
         ofModelName: (AnimalModel).toString()));
+
+    modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
+        key: UserModelAnimalModel.USERMODEL,
+        isRequired: true,
+        targetName: "usermodelID",
+        ofModelName: (UserModel).toString()));
   });
 }
 

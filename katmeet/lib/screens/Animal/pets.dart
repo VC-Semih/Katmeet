@@ -1,4 +1,5 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:katmeet/animal_repository.dart';
@@ -18,28 +19,25 @@ class MyPets extends StatefulWidget {
 
 class MyPetState extends State<MyPets> {
 
-
-
   UserModel userModel;
   List<AnimalModel> animalsModelList;
 
   @override
   Future<void> initState() {
-
+    super.initState();
     AuthRepository.getEmailFromAttributes().then((email) => {
       UserRepository.getUserByEmail(email).then((user) => {
-        AnimalRepository.getAnimalsByOwner(user).then((animals) => {
-        print(animals),
-        }),
-      }),
-    });
-    super.initState();
-
-    Future.delayed(Duration(seconds: 5), (){
-      print("Executed after 5 seconds");
+        print(user.id),
+        AnimalRepository.getAnimalsByOwner(user.id).then((value) => {
+          setState((){
+            userModel = user;
+            animalsModelList = value;
+            print(animalsModelList);
+          })
+        })
+      })
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

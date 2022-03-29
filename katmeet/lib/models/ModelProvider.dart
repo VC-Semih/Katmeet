@@ -27,7 +27,7 @@ export 'UserModelAnimalModel.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "cd0917135e19c7654eb91bb5de155347";
+  String version = "fb4fe31f52814d14fae1aa9448a75a7f";
   @override
   List<ModelSchema> modelSchemas = [
     AnimalModel.schema,

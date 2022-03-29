@@ -214,7 +214,7 @@ class NewPetState extends State<NewPet> {
                               race: _race.text,
                               description: _description.text,
                               birthdate: currentDate,
-                              animalOwner: userModel,
+                              animalOwnerId: userModel.id,
                             ).then((value) => {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Your animal has been added !')),
