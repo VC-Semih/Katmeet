@@ -10,6 +10,7 @@ import 'package:katmeet/models/UserModel.dart';
 import '../../auth_repository.dart';
 import '../../user_repository.dart';
 import '../add_pet.dart';
+import '../configuration.dart';
 
 
 class MyPets extends StatefulWidget {
@@ -27,7 +28,6 @@ class MyPetState extends State<MyPets> {
     super.initState();
     AuthRepository.getEmailFromAttributes().then((email) => {
       UserRepository.getUserByEmail(email).then((user) => {
-        print(user.id),
         AnimalRepository.getAnimalsByOwner(user.id).then((value) => {
           setState((){
             userModel = user;
@@ -44,16 +44,33 @@ class MyPetState extends State<MyPets> {
     return MaterialApp(
       title: "My Pets",
       home: Scaffold(
+        backgroundColor: Colors.grey[200],
         appBar: AppBar(
-
+          backgroundColor: primaryGreen,
         ),
         body: GridView.count(
           crossAxisCount: 2,
-          children: List.generate(100, (index) {
-            return Center(
-              child: Text(
-                'Item $index',
-                style: Theme.of(context).textTheme.headline5,
+          children: List.generate(animalsModelList.length, (index) {
+            return Card(
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.cabin_sharp),
+                    title: Text(animalsModelList[index].race),
+                    subtitle: Text(
+                      animalsModelList[index].race,
+                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      animalsModelList[index].description,
+                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                    ),
+                  ),
+                ],
               ),
             );
           }),
