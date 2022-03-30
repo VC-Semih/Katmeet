@@ -6,6 +6,7 @@ import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/models/AnimalModel.dart';
 import 'package:katmeet/models/ModelProvider.dart';
 import 'package:katmeet/models/UserModel.dart';
+import 'package:katmeet/screens/Animal/showAnimal.dart';
 
 import '../../auth_repository.dart';
 import '../../user_repository.dart';
@@ -32,7 +33,7 @@ class MyPetState extends State<MyPets> {
           setState((){
             userModel = user;
             animalsModelList = value;
-            print(animalsModelList);
+            print(animalsModelList.length);
           })
         })
       })
@@ -51,28 +52,34 @@ class MyPetState extends State<MyPets> {
         body: GridView.count(
           crossAxisCount: 2,
           children: List.generate(animalsModelList.length, (index) {
-            return Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.cabin_sharp),
-                    title: Text(animalsModelList[index].race),
-                    subtitle: Text(
-                      animalsModelList[index].race,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
+            return
+              GestureDetector(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowAnimal(id: animalsModelList[index].id))),
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.indeterminate_check_box_outlined),
+                        title: Text(animalsModelList[index].race),
+                        subtitle: Text(
+                          animalsModelList[index].race,
+                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          animalsModelList[index].description,
+                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      animalsModelList[index].description,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
-                  ),
-                ],
-              ),
-            );
+                ),
+              );
+
+              ;
           }),
         ),
       ),
