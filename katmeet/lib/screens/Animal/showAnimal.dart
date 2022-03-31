@@ -21,9 +21,12 @@ class AnimalShowsState extends State<AnimalShows> {
   Future<void> initState() {
     super.initState();
     AnimalRepository.getAnimalById(widget.id).then((value) => {
-      _animalModel = value ,
+    setState((){
+      _animalModel = value;
+        }),
         });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,21 +81,40 @@ class AnimalShowsState extends State<AnimalShows> {
               Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
-                    child: Text(_animalModel.race != null ? _animalModel.race : "",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: primaryGreen,
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Padding(
                     padding: const EdgeInsets.fromLTRB(40.0, 8.0, 40.0, 0.0),
                     child: Divider(
                       color: Color(0xff78909c),
                       height: 30.0,
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 100.0, 8.0, 4.0),
+                    child: Text(_animalModel.birthdate.day.toString()+"/"+_animalModel.birthdate.month.toString()+"/"+_animalModel.birthdate.year.toString(),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: primaryGreen,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                    child: Text("Race " +_animalModel.race != null ? _animalModel.race : "Hello ! I am using Katmeet",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: primaryGreen,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                    child: Text("Description " +  _animalModel.description != null ? _animalModel.description : "Hello ! I am using Katmeet",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: primaryGreen,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
+
                 ],
               ),
             ),
