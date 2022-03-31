@@ -157,7 +157,9 @@ class _FormProfile extends State<FormProfile>  {
         children: <Widget>[
           Form(
           key: _formKey,
-          child: Column(children:<Widget>[
+          child: Column(
+            children:
+            <Widget>[
             Stack(
               children:
               <Widget>[
@@ -250,7 +252,6 @@ class _FormProfile extends State<FormProfile>  {
               color: primaryGreen,
             ),
             Card(
-
             ),
             Align(
               alignment: Alignment.bottomCenter,

@@ -1,33 +1,104 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:katmeet/animal_repository.dart';
+import 'package:katmeet/models/AnimalModel.dart';
 
 import '../configuration.dart';
 
-class ShowAnimal extends StatelessWidget {
+class AnimalShows extends StatefulWidget {
+  @override
+  AnimalShowsState createState() => AnimalShowsState();
+
   final String id;
 
-  const ShowAnimal({Key key, this.id}) : super(key: key);
+  const AnimalShows({Key key, this.id}) : super(key: key);
+}
 
+class AnimalShowsState extends State<AnimalShows> {
+  AnimalModel _animalModel;
+
+  @override
+  Future<void> initState() {
+    super.initState();
+    AnimalRepository.getAnimalById(widget.id).then((value) => {
+      _animalModel = value ,
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: primaryGreen,
-          title: Text("Animal Description"),
-          leading: Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 0, 5),
-              child:CircleAvatar(backgroundImage: NetworkImage('https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&rect=37%2C29%2C4955%2C3293&q=45&auto=format&w=926&fit=clip'),),),),
-        body: Container(
-          child:
-          Scaffold(
-            body: CachedNetworkImage(
-              fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator()),
+      body: Stack(
+        children: [
+          Positioned.fill(
+              child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.blueGrey[300],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.white,
+                ),
+              )
+            ],
+          )),
+          Container(
+            margin: EdgeInsets.only(top: 40),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                  IconButton(icon: Icon(Icons.share), onPressed: () {})
+                ],
+              ),
             ),
           ),
-        ));
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Hero(
+                  tag: 1, child: Image.asset('assets/images/pet-cat2.png')),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child:
+            SingleChildScrollView(
+              child:
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                    child: Text(_animalModel.race != null ? _animalModel.race : "",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: primaryGreen,
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40.0, 8.0, 40.0, 0.0),
+                    child: Divider(
+                      color: Color(0xff78909c),
+                      height: 30.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

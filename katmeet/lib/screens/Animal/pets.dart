@@ -39,7 +39,6 @@ class MyPetState extends State<MyPets> {
       })
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,38 +48,66 @@ class MyPetState extends State<MyPets> {
         appBar: AppBar(
           backgroundColor: primaryGreen,
         ),
-        body: GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(animalsModelList.length, (index) {
-            return
-              GestureDetector(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>ShowAnimal(id: animalsModelList[index].id))),
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
+        body:
+        ListView.builder(
+            itemCount: animalsModelList.length,
+            itemBuilder: (BuildContext context,int index){
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AnimalShows(id:animalsModelList[index].id)));
+                },
+                child:
+                Container(
+                  height: 240,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
                     children: [
-                      ListTile(
-                        leading: Icon(Icons.indeterminate_check_box_outlined),
-                        title: Text(animalsModelList[index].race),
-                        subtitle: Text(
-                          animalsModelList[index].race,
-                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(color: Colors.blueGrey[300],
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: shadowList,
+                              ),
+                              margin: EdgeInsets.only(top: 50),
+                            ),
+                            Align(
+                              child: Hero(
+                                  tag:1,child: Image.asset('assets/images/pet-cat2.png')),
+                            )
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          animalsModelList[index].description,
-                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                        ),
-                      ),
+                      Expanded(
+                          child: Container(
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  animalsModelList[index].race,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),),
+                            margin: EdgeInsets.only(top: 60,bottom: 20),
+                            decoration: BoxDecoration(color: Colors.white,
+
+                                boxShadow: shadowList,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(20),
+                                    bottomRight: Radius.circular(20)
+
+                                )
+                            ),
+
+                          ))
+
                     ],
                   ),
-                ),
-              );
 
-              ;
-          }),
+                ),
+              );}
         ),
       ),
     );

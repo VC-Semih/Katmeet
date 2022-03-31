@@ -75,8 +75,10 @@ class _Profile extends State<Profile> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: _loading ? loadingWidget(_loading) : Column(
+      body:
+      SingleChildScrollView(
+        child: _loading ? loadingWidget(_loading) :
+        Column(
           children: <Widget>[
             Container(
               child: Padding(
