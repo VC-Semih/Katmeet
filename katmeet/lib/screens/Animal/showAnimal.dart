@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/models/AnimalModel.dart';
 
@@ -7,7 +8,7 @@ import '../configuration.dart';
 
 class AnimalShows extends StatefulWidget {
   @override
-  AnimalShowsState createState() => AnimalShowsState();
+  AnimalShowsState createState() => AnimalShowsState(id);
 
   final String id;
 
@@ -16,22 +17,27 @@ class AnimalShows extends StatefulWidget {
 
 class AnimalShowsState extends State<AnimalShows> {
   AnimalModel _animalModel;
+  final String id;
+  bool _loading = true;
+
+  var outputFormat = DateFormat('dd/MM/yyyy');
+  AnimalShowsState(this.id);
 
   @override
   Future<void> initState() {
     super.initState();
-    AnimalRepository.getAnimalById(widget.id).then((value) => {
-    setState((){
-      _animalModel = value;
-        }),
+    AnimalRepository.getAnimalById(id).then((value) => {
+          setState(() {
+            _animalModel = value;
+            _loading = false;
+          }),
         });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: _loading ? CircularProgressIndicator() : Stack(
         children: [
           Positioned.fill(
               child: Column(
@@ -70,7 +76,7 @@ class AnimalShowsState extends State<AnimalShows> {
             child: Align(
               alignment: Alignment.topCenter,
               child: Hero(
-                  tag: 1, child: Image.asset('assets/images/pet-cat2.png')),
+                  tag: id, child: Image.asset('assets/images/pet-cat2.png')),
             ),
           ),
           Align(
@@ -89,7 +95,7 @@ class AnimalShowsState extends State<AnimalShows> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 100.0, 8.0, 4.0),
-                    child: Text(_animalModel.birthdate.day.toString()+"/"+_animalModel.birthdate.month.toString()+"/"+_animalModel.birthdate.year.toString(),
+                    child: Text(outputFormat.format(_animalModel.birthdate),
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: primaryGreen,

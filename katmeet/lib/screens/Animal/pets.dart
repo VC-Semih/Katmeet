@@ -23,6 +23,7 @@ class MyPetState extends State<MyPets> {
 
   UserModel userModel;
   List<AnimalModel> animalsModelList;
+  bool _loading = true;
 
   @override
   Future<void> initState() {
@@ -33,7 +34,7 @@ class MyPetState extends State<MyPets> {
           setState((){
             userModel = user;
             animalsModelList = value;
-            print(animalsModelList.length);
+            _loading = false;
           })
         })
       })
@@ -49,6 +50,7 @@ class MyPetState extends State<MyPets> {
           backgroundColor: primaryGreen,
         ),
         body:
+        _loading ? CircularProgressIndicator() :
         ListView.builder(
             itemCount: animalsModelList.length,
             itemBuilder: (BuildContext context,int index){
@@ -74,7 +76,8 @@ class MyPetState extends State<MyPets> {
                             ),
                             Align(
                               child: Hero(
-                                  tag:1,child: Image.asset('assets/images/pet-cat2.png')),
+                                  tag:animalsModelList[index].id,
+                                  child: Image.asset('assets/images/pet-cat2.png')),
                             )
                           ],
                         ),
