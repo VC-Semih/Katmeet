@@ -56,16 +56,16 @@ class StorageService {
   void getImagesByS3KeyList(List<String> s3keys) async {
     try {
       final getUrlOptions =
-      GetUrlOptions(accessLevel: StorageAccessLevel.protected);
+          GetUrlOptions(accessLevel: StorageAccessLevel.protected);
       final List<List<String>> imageUrls =
-      await Future.wait(s3keys.map((item) async {
+          await Future.wait(s3keys.map((item) async {
         final urlResult =
-        await Amplify.Storage.getUrl(key: item, options: getUrlOptions);
+            await Amplify.Storage.getUrl(key: item, options: getUrlOptions);
         return [item, urlResult.url];
       }));
 
       final Map<String, String> imageUrlMap =
-      new Map.fromIterable(imageUrls, key: (v) => v[0], value: (v) => v[1]);
+          new Map.fromIterable(imageUrls, key: (v) => v[0], value: (v) => v[1]);
       imageUrlsController.add(imageUrlMap);
     } on Exception catch (e) {
       print('getImagesByS3KeyList error - $e');
