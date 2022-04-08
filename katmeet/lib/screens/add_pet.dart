@@ -4,6 +4,7 @@ import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'capture.dart';
+import 'configuration.dart';
 
 class AddPet extends StatefulWidget {
   AddPet({Key key, @required this.auth}) : super(key: key);
@@ -46,7 +47,7 @@ class AddPetState extends State<AddPet> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () => _openCameraView(context),
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: primaryGreen,
           tooltip: 'Capture a photo',
           child: Icon(Icons.add_a_photo),
         ),

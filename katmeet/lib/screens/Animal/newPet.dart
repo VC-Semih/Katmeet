@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/models/ModelProvider.dart';
 import 'package:katmeet/models/UserModel.dart';
+import 'package:katmeet/screens/Animal/crudAnimalPhoto.dart';
 
 import '../../auth_repository.dart';
 import '../../user_repository.dart';
@@ -71,22 +72,6 @@ class NewPetState extends State<NewPet> {
               Navigator.pop(context);
             },
           ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.favorite_border,
-                color: black,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 8.0, 12.0, 8.0),
-              child: Icon(
-                Icons.more_vert,
-                color: black,
-              ),
-            ),
-          ],
         ),
         body: Center(
           child: ListView(
@@ -99,7 +84,7 @@ class NewPetState extends State<NewPet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Animal type"),
+                    Text("Your adorable pet is a :"),
                     Row(children: <Widget>[
                       Expanded(
                           child: ListTile(
@@ -173,7 +158,10 @@ class NewPetState extends State<NewPet> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
                     ),
-                    Text("Animal birthdate"),
+                    Text("Birthdate :"),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 4.0),
+                    ),
                     Row(
                       children: [
                         SizedBox(
@@ -198,31 +186,49 @@ class NewPetState extends State<NewPet> {
                         )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState.validate()) {
-                            // If the form is valid, display a snackbar. In the real world,
-                            // you'd often call a server or save the information in a database.
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Processing Data')),
-                            );
-                            AnimalRepository.createAnimal(
-                              type: _animalType,
-                              race: _race.text,
-                              description: _description.text,
-                              birthdate: currentDate,
-                              animalOwner: userModel,
-                            ).then((value) => {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Your animal has been added !')),
-                              )
-                            });
-                          }
-                        },
-                        child: const Text('Submit'),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Validate returns true if the form is valid, or false otherwise.
+                                if (_formKey.currentState.validate()) {
+                                  // If the form is valid, display a snackbar. In the real world,
+                                  // you'd often call a server or save the information in a database.
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Processing Data')),
+                                  );
+                                  AnimalRepository.createAnimal(
+                                    type: _animalType,
+                                    race: _race.text,
+                                    description: _description.text,
+                                    birthdate: currentDate,
+                                    animalOwnerId: userModel.id,
+                                  ).then((value) => {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Your animal has been added !')),
+                                        ),
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CrudAnimalPhoto(
+                                                      animalModel: value,
+                                                    )))
+                                      });
+                                }
+                              },
+                              child: const Text('Submit'),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
