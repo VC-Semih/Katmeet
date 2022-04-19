@@ -81,30 +81,32 @@ class AnimalShowsState extends State<AnimalShows> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 20),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Hero(
-                  tag: id, child: Image.asset('assets/images/pet-cat2.png')),
-            ),
-          ),
+
           Align(
+
             alignment: Alignment.center,
             child:
             SingleChildScrollView(
               child:
               Column(
                 children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Hero(
+                          tag: id, child: Image.asset('assets/images/pet-cat2.png')),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(40.0, 8.0, 40.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 40.0, 0.0),
                     child: Divider(
                       color: Color(0xff78909c),
                       height: 30.0,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 100.0, 8.0, 4.0),
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                     child: Text(outputFormat.format(_animalModel.birthdate),
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -132,7 +134,7 @@ class AnimalShowsState extends State<AnimalShows> {
                   ),
                   if (_photo) ...[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 100.0, 8.0, 4.0),
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                       child: CarouselSlider(
                         options: CarouselOptions(autoPlay: true),
                         items: images.map((item) => Center(
@@ -141,8 +143,7 @@ class AnimalShowsState extends State<AnimalShows> {
                             fit: BoxFit.cover,
                           ))).toList(),
                       ),
-                    )
-                  ],
+                    )],
                 ],
               ),
             ),
