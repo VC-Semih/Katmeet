@@ -50,6 +50,7 @@ dependencies:
   easy_widgets: ^0.0.7
   flutter_native_splash:
   intl: ^0.17.0
+  carousel_slider: ^4.0.0
 
 
 dev_dependencies:

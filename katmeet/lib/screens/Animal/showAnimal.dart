@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/models/AnimalModel.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import '../configuration.dart';
 
@@ -19,9 +20,18 @@ class AnimalShowsState extends State<AnimalShows> {
   AnimalModel _animalModel;
   final String id;
   bool _loading = true;
+  bool _photo = true;
 
   var outputFormat = DateFormat('dd/MM/yyyy');
   AnimalShowsState(this.id);
+
+
+
+  List<String> images = [
+    "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+    "https://wallpaperaccess.com/full/2637581.jpg",
+    "https://uhdwallpapers.org/uploads/converted/20/01/14/the-mandalorian-5k-1920x1080_477555-mm-90.jpg"
+  ];
 
   @override
   Future<void> initState() {
@@ -120,7 +130,19 @@ class AnimalShowsState extends State<AnimalShows> {
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold)),
                   ),
-
+                  if (_photo) ...[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 100.0, 8.0, 4.0),
+                      child: CarouselSlider(
+                        options: CarouselOptions(autoPlay: true),
+                        items: images.map((item) => Center(
+                          child: Image.network(
+                            item,
+                            fit: BoxFit.cover,
+                          ))).toList(),
+                      ),
+                    )
+                  ],
                 ],
               ),
             ),
