@@ -7,6 +7,7 @@ import 'package:katmeet/animal_repository.dart';
 import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/AnimalModel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:katmeet/models/TypeAnimal.dart';
 import 'package:katmeet/photo_repository.dart';
 
 import '../configuration.dart';
@@ -67,7 +68,13 @@ class AnimalShowsState extends State<AnimalShows> {
                             })
                           })
                         })
-                  }
+                  }else{
+                  setState(() {
+                    _animalModel = value;
+                    _hasPhotos = false;
+                    _loading = false;
+                  })
+                }
               })
         });
   }
@@ -83,6 +90,14 @@ class AnimalShowsState extends State<AnimalShows> {
               Expanded(
                 child: Container(
                   color: Colors.blueGrey[300],
+                  width: MediaQuery.of(context).size.width,
+                  child: _hasPhotos ?
+                  CachedNetworkImage(
+                    imageUrl:images.first,
+                    placeholder: (context, url) => Container(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator()),
+                  ) : null,
                 ),
               ),
               Expanded(
@@ -112,27 +127,25 @@ class AnimalShowsState extends State<AnimalShows> {
 
           Align(
 
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
             child:
             SingleChildScrollView(
               child:
               Column(
                 children: <Widget>[
+                  if(!_hasPhotos)...[
                   Container(
-                    margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: 40),
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Hero(
-                          tag: id, child: Image.asset('assets/images/pet-cat2.png')),
+                          tag: id, child: _animalModel.type == TypeAnimal.CAT ?
+                      Image.asset('assets/images/pet-cat2.png') :
+                      Padding(padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 110.0), child: Image.asset('assets/images/pet-dog.png'),)),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 40.0, 0.0),
-                    child: Divider(
-                      color: Color(0xff78909c),
-                      height: 30.0,
-                    ),
-                  ),
+                  )] else...[
+                    Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 400))
+                  ],
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                     child: Text(outputFormat.format(_animalModel.birthdate),
