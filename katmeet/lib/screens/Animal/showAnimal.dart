@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:katmeet/animal_repository.dart';
@@ -51,18 +52,21 @@ class AnimalShowsState extends State<AnimalShows> {
                   {
                     photos.forEach((photo) {
                       s3list.add(photo.s3key);
+
                     }),
                     _storageService
-                        .getListImagesByS3keyList(s3keys)
+                        .getListImagesByS3keyList(s3list)
                         .then((imageList) => {
-                              setState(() {
-                                _animalModel = value;
-                                s3keys = s3list;
-                                _hasPhotos = true;
-                                images = imageList;
-                                _loading = false;
-                              })
+                          Future.delayed(Duration(seconds: 2)).then((event) => {
+                            setState(() {
+                              _animalModel = value;
+                              s3keys = s3list;
+                              _hasPhotos = true;
+                              images = imageList;
+                              _loading = false;
                             })
+                          })
+                        })
                   }
               })
         });
@@ -162,9 +166,12 @@ class AnimalShowsState extends State<AnimalShows> {
                       child: CarouselSlider(
                         options: CarouselOptions(autoPlay: true),
                         items: images.map((item) => Center(
-                          child: Image.network(
-                            item,
+                          child: CachedNetworkImage(
+                            imageUrl:item,
                             fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator()),
                           ))).toList(),
                       ),
                     )],
