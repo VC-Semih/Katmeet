@@ -155,7 +155,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>Screen2()));
 
               },
-              child: Container(
+              child:
+              Container(
                 height: 240,
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: Row(

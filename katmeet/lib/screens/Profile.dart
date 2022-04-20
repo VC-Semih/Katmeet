@@ -75,8 +75,10 @@ class _Profile extends State<Profile> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: _loading ? loadingWidget(_loading) : Column(
+      body:
+      SingleChildScrollView(
+        child: _loading ? loadingWidget(_loading) :
+        Column(
           children: <Widget>[
             Container(
               child: Padding(
@@ -237,7 +239,6 @@ class _Profile extends State<Profile> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 22.0),
                 child: Row(
-
                   children: <Widget>[
                     Expanded(
                       child: Column(
@@ -252,7 +253,6 @@ class _Profile extends State<Profile> {
                               color: Colors.white,
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
-
                             ),
                           ),
                           SizedBox(

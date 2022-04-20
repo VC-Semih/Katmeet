@@ -26,7 +26,6 @@ class AuthRepository {
       throw e;
     }
   }
-
   static Future<String> attemptAutoLogin() async {
     try {
       final session = await Amplify.Auth.fetchAuthSession();

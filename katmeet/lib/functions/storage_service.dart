@@ -71,4 +71,21 @@ class StorageService {
       print('getImagesByS3KeyList error - $e');
     }
   }
+
+  Future<List<String>> getListImagesByS3keyList(List<String> s3keys) async {
+    try {
+      List<String> imagesUrl = [];
+      final getUrlOptions =
+          GetUrlOptions(accessLevel: StorageAccessLevel.protected);
+      await s3keys.forEach((s3key) async {
+        final urlResult =
+            await Amplify.Storage.getUrl(key: s3key, options: getUrlOptions);
+        imagesUrl.add(urlResult.url);
+      });
+      return imagesUrl;
+    } on Exception catch (e) {
+      print('getImagesByS3KeyList error - $e');
+      return null;
+    }
+  }
 }

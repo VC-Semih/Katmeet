@@ -107,7 +107,8 @@ class PhotosState extends State<Photos> {
   }
 
   Widget _galleryGrid() {
-    return StreamBuilder(
+    return
+      StreamBuilder(
         // Le générateur StreamBuilder va utiliser le contrôleur imageUrlsController qui sera transmis du service StorageService pour fournir des instantanés de nos données.
         stream: _storageService.imageUrlsController.stream,
         builder: (context, AsyncSnapshot<Map<String, String>> snapshot) {
@@ -120,7 +121,8 @@ class PhotosState extends State<Photos> {
                   child: Container(
                       margin: EdgeInsets.only(
                           left: 30.0, top: 20.0, right: 30.0, bottom: 20.0),
-                      child: GridView.builder(
+                      child:
+                      GridView.builder(
                           physics: AlwaysScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
