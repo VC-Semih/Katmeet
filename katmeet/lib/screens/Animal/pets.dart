@@ -12,7 +12,6 @@ import 'package:katmeet/screens/Animal/showAnimal.dart';
 
 import '../../auth_repository.dart';
 import '../../user_repository.dart';
-import '../add_pet.dart';
 import '../configuration.dart';
 
 

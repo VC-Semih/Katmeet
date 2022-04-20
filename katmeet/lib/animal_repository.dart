@@ -69,4 +69,13 @@ class AnimalRepository {
     });
     return false;
   }
+
+  static Future<List<AnimalModel>> getAllAnimals() async {
+    try {
+      final animals = await Amplify.DataStore.query(AnimalModel.classType);
+      return animals.isNotEmpty ? animals : null;
+    } on Exception catch (e) {
+      throw e;
+    }
+  }
 }

@@ -1,9 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:katmeet/animal_repository.dart';
+import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/AnimalModel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:katmeet/photo_repository.dart';
 
 import '../configuration.dart';
 
@@ -20,27 +23,48 @@ class AnimalShowsState extends State<AnimalShows> {
   AnimalModel _animalModel;
   final String id;
   bool _loading = true;
-  bool _photo = true;
+  bool _hasPhotos = false;
 
   var outputFormat = DateFormat('dd/MM/yyyy');
   AnimalShowsState(this.id);
 
-
+  final _storageService = new StorageService();
 
   List<String> images = [
     "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
     "https://wallpaperaccess.com/full/2637581.jpg",
     "https://uhdwallpapers.org/uploads/converted/20/01/14/the-mandalorian-5k-1920x1080_477555-mm-90.jpg"
   ];
+  List<String> s3keys = [];
 
   @override
   Future<void> initState() {
     super.initState();
+    loadAll();
+  }
+
+  Future<void> loadAll() {
+    List<String> s3list = [];
     AnimalRepository.getAnimalById(id).then((value) => {
-          setState(() {
-            _animalModel = value;
-            _loading = false;
-          }),
+          PhotoRepository.getPhotosByAnimalID(value.id).then((photos) => {
+                if (photos != null)
+                  {
+                    photos.forEach((photo) {
+                      s3list.add(photo.s3key);
+                    }),
+                    _storageService
+                        .getListImagesByS3keyList(s3keys)
+                        .then((imageList) => {
+                              setState(() {
+                                _animalModel = value;
+                                s3keys = s3list;
+                                _hasPhotos = true;
+                                images = imageList;
+                                _loading = false;
+                              })
+                            })
+                  }
+              })
         });
   }
 
@@ -132,7 +156,7 @@ class AnimalShowsState extends State<AnimalShows> {
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold)),
                   ),
-                  if (_photo) ...[
+                  if (_hasPhotos) ...[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                       child: CarouselSlider(
