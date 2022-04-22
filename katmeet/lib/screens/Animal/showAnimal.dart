@@ -8,9 +8,12 @@ import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/AnimalModel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:katmeet/models/TypeAnimal.dart';
+import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/photo_repository.dart';
 import 'package:katmeet/screens/Animal/edit.dart';
 
+import '../../auth_repository.dart';
+import '../../user_repository.dart';
 import '../configuration.dart';
 import 'crudAnimalPhoto.dart';
 
@@ -28,6 +31,7 @@ class AnimalShowsState extends State<AnimalShows> {
   final String id;
   bool _loading = true;
   bool _hasPhotos = false;
+  bool isAnimalOwner = false;
 
   var outputFormat = DateFormat('dd/MM/yyyy');
   AnimalShowsState(this.id);
@@ -37,10 +41,19 @@ class AnimalShowsState extends State<AnimalShows> {
   List<String> images = [];
   List<String> s3keys = [];
 
+  UserModel userModel;
+
   @override
   Future<void> initState() {
     super.initState();
-    loadAll();
+    AuthRepository.getEmailFromAttributes().then((email) => {
+      UserRepository.getUserByEmail(email).then((user) => {
+        setState((){
+          userModel = user;
+        }),
+        loadAll()
+      })
+    });
   }
 
   Future<void> loadAll() {
@@ -71,6 +84,11 @@ class AnimalShowsState extends State<AnimalShows> {
                     _animalModel = value;
                     _hasPhotos = false;
                     _loading = false;
+                  })
+                },
+                if(value.animalOwner == userModel.id) {
+                  setState((){
+                    isAnimalOwner = true;
                   })
                 }
               })
@@ -142,6 +160,7 @@ class AnimalShowsState extends State<AnimalShows> {
                   )] else...[
                     Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 400))
                   ],
+                  if(isAnimalOwner) ...[
                   Center(
                     child:  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -163,7 +182,7 @@ class AnimalShowsState extends State<AnimalShows> {
                         ),
                       ],
                     ),
-                  ),
+                  )],
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                     child: Text("Description " +  _animalModel.race != null ? _animalModel.race : "Hello ! I am using Katmeet",
