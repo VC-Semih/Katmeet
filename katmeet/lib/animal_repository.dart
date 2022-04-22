@@ -3,6 +3,7 @@
 import 'package:amplify_flutter/amplify.dart';
 import 'package:katmeet/models/AnimalModel.dart';
 import 'package:katmeet/models/ModelProvider.dart';
+import 'package:katmeet/models/TypeAnimal.dart';
 
 class AnimalRepository {
   static Future<AnimalModel> getAnimalById(String animalId) async {
@@ -69,9 +70,21 @@ class AnimalRepository {
     });
     return false;
   }
+
   static Future<List<AnimalModel>> getAllAnimals() async {
     try {
       final animals = await Amplify.DataStore.query(AnimalModel.classType);
+      return animals.isNotEmpty ? animals : null;
+    } on Exception catch (e) {
+      throw e;
+    }
+  }
+
+  static Future<List<AnimalModel>> getAnimalsByType(
+      TypeAnimal typeAnimal) async {
+    try {
+      final animals = await Amplify.DataStore.query(AnimalModel.classType,
+          where: AnimalModel.TYPE.eq(typeAnimal));
       return animals.isNotEmpty ? animals : null;
     } on Exception catch (e) {
       throw e;
