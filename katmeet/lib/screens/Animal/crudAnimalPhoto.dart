@@ -170,7 +170,7 @@ class CrudAnimalPhotoState extends State<CrudAnimalPhoto> {
                                         try {
                                           RemoveOptions options = RemoveOptions(
                                               accessLevel:
-                                                  StorageAccessLevel.protected);
+                                                  StorageAccessLevel.guest);
                                           final RemoveResult result =
                                               await Amplify.Storage.remove(
                                                   key: s3key, options: options);

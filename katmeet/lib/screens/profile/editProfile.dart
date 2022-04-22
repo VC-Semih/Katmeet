@@ -275,7 +275,7 @@ class _FormProfile extends State<FormProfile>  {
                               if(_image != null){ //Only if image is not null we upload
                                 var extension = _image.path.substring(_image.path.length - 3, _image.path.length);
                                 var key = new DateTime.now().microsecondsSinceEpoch.toString() + ".$extension";
-                                S3UploadFileOptions options = S3UploadFileOptions(accessLevel: StorageAccessLevel.protected);
+                                S3UploadFileOptions options = S3UploadFileOptions(accessLevel: StorageAccessLevel.guest, targetIdentityId: "photos");
                                 try {
                                   File local = File(_image.path);
                                   Amplify.Storage.uploadFile(key: key, local: local, options: options).then((UploadFileResult result) {

@@ -22,7 +22,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: primaryGreen,
-      padding: EdgeInsets.only(top:50,bottom: 70,left: 10),
+      padding: EdgeInsets.only(top:100,bottom: 70,left: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
