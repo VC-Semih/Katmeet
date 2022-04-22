@@ -35,7 +35,7 @@ class AddPetState extends State<AddPet> {
   void initState() {
     super.initState();
     S3ListOptions options =
-    S3ListOptions(accessLevel: StorageAccessLevel.protected);
+    S3ListOptions(accessLevel: StorageAccessLevel.guest);
     Amplify.Storage.list(path: 'protected', options: options).then((result) {
       print("Storage items");
       print(result.items);

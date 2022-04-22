@@ -154,7 +154,7 @@ class PhotosState extends State<Photos> {
                                 FocusedMenuItem(title: Text("Delete",style: TextStyle(color: Colors.redAccent),),trailingIcon: Icon(Icons.delete,color: Colors.redAccent,) ,onPressed: () async {
                                   final s3key =  snapshot.data.keys.elementAt(index);
                                   try {
-                                    RemoveOptions options = RemoveOptions(accessLevel: StorageAccessLevel.protected);
+                                    RemoveOptions options = RemoveOptions(accessLevel: StorageAccessLevel.guest);
                                     final RemoveResult result =
                                     await Amplify.Storage.remove(key: s3key, options: options);
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

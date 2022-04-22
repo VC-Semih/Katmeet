@@ -72,7 +72,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               setState(() {
                 s3keys.add(photos.first.s3key);
                 animalS3.putIfAbsent(animal.id, () => photos.first.s3key);
-                _storageService.getImagesByS3KeyList(s3keys);
+                _storageService.getImages();
                 _loading = false;
               })
             } else {

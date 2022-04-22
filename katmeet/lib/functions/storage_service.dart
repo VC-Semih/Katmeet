@@ -11,16 +11,16 @@ class StorageService {
   void getImages() async {
     try {
       // Étant donné que nous voulons afficher toutes les photos que les utilisateurs ont chargées, 
-      // nous spécifions le niveau d'accès comme StorageAccessLevel.protected.
+      // nous spécifions le niveau d'accès comme StorageAccessLevel.guest.
       final listOptions =
-          S3ListOptions(accessLevel: StorageAccessLevel.protected);
+          S3ListOptions(accessLevel: StorageAccessLevel.guest);
       // Nous demandons ensuite à Storage de répertorier toutes les photos pertinentes étant donné les options S3ListOptions.
       final result = await Amplify.Storage.list(options: listOptions);
 
       // Si le résultat de la liste est probant,
       // nous devons obtenir la véritable URL de téléchargement de chaque photo car le résultat de la liste contient uniquement une liste de clés et non la véritable URL de la photo.
       final getUrlOptions =
-          GetUrlOptions(accessLevel: StorageAccessLevel.protected);
+          GetUrlOptions(accessLevel: StorageAccessLevel.guest);
       // Nous utilisons .map pour itérer sur chaque élément du résultat de la liste et renvoyer l'URL de téléchargement de chaque élément de manière asynchrone.
       final List<List<String>> imageUrls =
           await Future.wait(result.items.map((item) async {
@@ -42,8 +42,8 @@ class StorageService {
 
   void getImageByS3Key(String s3key) async {
     try{
-      final listOptions = S3ListOptions(accessLevel: StorageAccessLevel.protected);
-      final getUrlOptions = GetUrlOptions(accessLevel: StorageAccessLevel.protected);
+      final listOptions = S3ListOptions(accessLevel: StorageAccessLevel.guest);
+      final getUrlOptions = GetUrlOptions(accessLevel: StorageAccessLevel.guest);
       final urlResult = await Amplify.Storage.getUrl(key: s3key, options: getUrlOptions);
       final String imageUrl = urlResult.url;
 
@@ -56,7 +56,7 @@ class StorageService {
   void getImagesByS3KeyList(List<String> s3keys) async {
     try {
       final getUrlOptions =
-          GetUrlOptions(accessLevel: StorageAccessLevel.protected);
+          GetUrlOptions(accessLevel: StorageAccessLevel.guest);
       final List<List<String>> imageUrls =
           await Future.wait(s3keys.map((item) async {
         final urlResult =
@@ -76,7 +76,7 @@ class StorageService {
     try {
       List<String> imagesUrl = [];
       final getUrlOptions =
-          GetUrlOptions(accessLevel: StorageAccessLevel.protected);
+          GetUrlOptions(accessLevel: StorageAccessLevel.guest);
       await s3keys.forEach((s3key) async {
         final urlResult =
             await Amplify.Storage.getUrl(key: s3key, options: getUrlOptions);

@@ -134,7 +134,7 @@ class DisplayPictureScreen extends StatelessWidget {
           var key = new DateTime.now().microsecondsSinceEpoch.toString() +
               ".$extension";
           S3UploadFileOptions options =
-              S3UploadFileOptions(accessLevel: StorageAccessLevel.protected);
+              S3UploadFileOptions(accessLevel: StorageAccessLevel.guest);
           try {
             File local = File(imagePath);
             Amplify.Storage.uploadFile(key: key, local: local, options: options).then((UploadFileResult result) {
