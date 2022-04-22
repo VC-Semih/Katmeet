@@ -9,8 +9,10 @@ import 'package:katmeet/models/AnimalModel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:katmeet/models/TypeAnimal.dart';
 import 'package:katmeet/photo_repository.dart';
+import 'package:katmeet/screens/Animal/edit.dart';
 
 import '../configuration.dart';
+import 'crudAnimalPhoto.dart';
 
 class AnimalShows extends StatefulWidget {
   @override
@@ -32,11 +34,7 @@ class AnimalShowsState extends State<AnimalShows> {
 
   final _storageService = new StorageService();
 
-  List<String> images = [
-    "https://images.wallpapersden.com/image/download/purple-sunrise-4k-vaporwave_bGplZmiUmZqaraWkpJRmbmdlrWZlbWU.jpg",
-    "https://wallpaperaccess.com/full/2637581.jpg",
-    "https://uhdwallpapers.org/uploads/converted/20/01/14/the-mandalorian-5k-1920x1080_477555-mm-90.jpg"
-  ];
+  List<String> images = [];
   List<String> s3keys = [];
 
   @override
@@ -78,12 +76,29 @@ class AnimalShowsState extends State<AnimalShows> {
               })
         });
   }
-
+  var theme1 = Colors.white;
+  var theme2 = Color(0xff2E324F);
+  var white = Colors.white;
+  var black = Colors.black;
+  bool switchColor = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        backgroundColor: theme1,
+        elevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: _loading ? CircularProgressIndicator() : Stack(
-        children: [
+        children:
+        [
           Positioned.fill(
               child: Column(
             children: [
@@ -107,26 +122,7 @@ class AnimalShowsState extends State<AnimalShows> {
               )
             ],
           )),
-          Container(
-            margin: EdgeInsets.only(top: 40),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.arrow_back_ios),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                  IconButton(icon: Icon(Icons.share), onPressed: () {})
-                ],
-              ),
-            ),
-          ),
-
           Align(
-
             alignment: Alignment.topCenter,
             child:
             SingleChildScrollView(
@@ -146,6 +142,37 @@ class AnimalShowsState extends State<AnimalShows> {
                   )] else...[
                     Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 400))
                   ],
+                  Center(
+                    child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextButton.icon(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => FormAnimal(id: _animalModel.id,)));// Respond to button press
+                          },
+                          icon: Icon(Icons.mode_edit, size: 18),
+                          label: Text("Edit"),
+                        ),
+                        SizedBox(width: 5),
+                        TextButton.icon(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => CrudAnimalPhoto(animalModel: _animalModel)));// Respond to button press
+                          },
+                          icon: Icon(Icons.photo_album, size: 18),
+                          label: Text("Edit images"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                    child: Text("Description " +  _animalModel.race != null ? _animalModel.race : "Hello ! I am using Katmeet",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: primaryGreen,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                     child: Text(outputFormat.format(_animalModel.birthdate),
@@ -153,15 +180,6 @@ class AnimalShowsState extends State<AnimalShows> {
                         style: TextStyle(
                             color: primaryGreen,
                             fontSize: 14.0,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
-                    child: Text("Race " +_animalModel.race != null ? _animalModel.race : "Hello ! I am using Katmeet",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: primaryGreen,
-                            fontSize: 20.0,
                             fontWeight: FontWeight.bold)),
                   ),
                   Padding(
