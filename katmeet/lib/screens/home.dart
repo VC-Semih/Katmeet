@@ -39,6 +39,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<PhotosModel> photosModel = [];
   Map<String, String> animalS3 = new Map<String, String>();
 
+  TypeAnimal curentAnimalType = null;
+
   HomePageState(this._storageService);
 
   @override
@@ -53,15 +55,26 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 })
               })
         });
-    AnimalRepository.getAllAnimals().then((value) => {
-      setState(() {
-        animalsModelList = value;
-        loadAll();
-      })
-
-    });
+    loadAnimals();
   }
-
+  Future<void> loadAnimals(){
+    if(curentAnimalType == null){
+      AnimalRepository.getAllAnimals().then((value) =>
+      {
+        setState(() {
+          animalsModelList = value;
+          loadAll();
+        })
+      });
+    }else{
+      AnimalRepository.getAnimalsByType(curentAnimalType).then((value) => {
+        setState(() {
+          animalsModelList = value;
+          loadAll();
+        })
+      });
+    }
+  }
   Future<void> loadAll() {
     if(animalsModelList != null) {
       for (AnimalModel animal in animalsModelList) {
@@ -155,47 +168,51 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ),
 
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
-              margin: EdgeInsets.symmetric(vertical: 30,horizontal: 20),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.search),
-                  Text('Search pet to adopt'),
-                  Icon(Icons.settings)
-
-                ],
-              ),
-            ),
-
             Container(height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
                 itemBuilder: (context,index){
-                  return Container(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.only(left: 20),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: shadowList,
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: Image.asset(categories[index]['iconPath'],       height: 50,
-                            width: 50,color: Colors.grey[700],),
-                        ),
-                        Text(categories[index]['name'])
-                      ],
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        switch (categories[index]['name']){
+                          case "Dogs":
+                            curentAnimalType = TypeAnimal.DOG;
+                            loadAnimals();
+                            break;
+                          case "Cats":
+                            curentAnimalType = TypeAnimal.CAT;
+                            loadAnimals();
+                            break;
+                          default:
+                            curentAnimalType = null;
+                            loadAnimals();
+                            break;
+                        }
+                      });
+                    },
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.only(left: 20),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: shadowList,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Image.asset(
+                                categories[index]['iconPath'],
+                                height: 50,
+                                width: 50,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            Text(categories[index]['name'])
+                          ],
                     ),
-                  );
+                  ));
                 },
 
               ),

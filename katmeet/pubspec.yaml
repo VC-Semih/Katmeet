@@ -29,7 +29,7 @@ dependencies:
   amplify_storage_s3:
   amplify_datastore:
   amplify_api:
-  camera:
+  camera: 0.9.4+5
   path_provider:
   path:
   pedantic: ^1.8.0
