@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  web_socket_channel:
   amplify_flutter:
   amplify_analytics_pinpoint:
   amplify_auth_cognito:
@@ -39,8 +40,7 @@ dependencies:
   image_picker: ^0.8.4+2
   image_cropper:
   image_picker_gallery_camera:
-
-
+  socket_io_client:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.4

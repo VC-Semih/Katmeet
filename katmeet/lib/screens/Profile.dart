@@ -6,6 +6,7 @@ import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/screens/profile/editProfile.dart';
 import 'package:katmeet/user_repository.dart';
+import 'chat/dart.dart';
 import 'configuration.dart';
 import 'package:katmeet/auth_repository.dart';
 
@@ -99,6 +100,17 @@ class _Profile extends State<Profile> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(username:userModel.username )));
+              },
+              child: Text(
+                'chat', //title
+                textAlign: TextAlign.end,
+                style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                //aligment
               ),
             ),
             Padding(

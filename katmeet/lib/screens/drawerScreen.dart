@@ -6,6 +6,7 @@ import 'package:katmeet/screens/Animal/pets.dart';
 import 'package:katmeet/screens/Profile.dart';
 import 'package:katmeet/screens/Animal/newPet.dart';
 import 'package:katmeet/screens/profile/editProfile.dart';
+import 'chat/dart.dart';
 import 'configuration.dart';
 
 
@@ -112,6 +113,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   //aligment
                 ),
               ),
+
             ],
 
           )
