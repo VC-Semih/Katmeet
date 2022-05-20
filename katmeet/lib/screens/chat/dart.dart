@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
           centerTitle: true,
           title: const Text('Chat Screen'),
-          backgroundColor: const Color(0xFF271160)),
+          backgroundColor: const Color(0xff416d6d)),
       body: SafeArea(
         child: Container(
           color: const Color(0xFFEAEFF2),
@@ -138,7 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       height: 43,
                       width: 42,
                       child: FloatingActionButton(
-                        backgroundColor: const Color(0xFF271160),
+                        backgroundColor: const Color(0xFFB2DFDB),
                         onPressed: () async {
                           if (_messageController.text.trim().isNotEmpty) {
                             String message = _messageController.text.trim();
@@ -205,7 +205,7 @@ class ChatBubble extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 5.0),
             constraints: BoxConstraints(maxWidth: size.width * .5),
             decoration: BoxDecoration(
-              color: isMe ? const Color(0xFFE3D8FF) : const Color(0xFFFFFFFF),
+              color: isMe ? const Color(0xFFB2DFDB) : const Color(0xFFFFFFFF),
               borderRadius: isMe
                   ? const BorderRadius.only(
                 topRight: Radius.circular(11),
@@ -229,7 +229,7 @@ class ChatBubble extends StatelessWidget {
                   textAlign: TextAlign.start,
                   softWrap: true,
                   style:
-                  const TextStyle(color: Color(0xFF2E1963), fontSize: 14),
+                  const TextStyle(color: Color(0xFF212121), fontSize: 14),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -239,7 +239,7 @@ class ChatBubble extends StatelessWidget {
                       date ?? '',
                       textAlign: TextAlign.end,
                       style: const TextStyle(
-                          color: Color(0xFF594097), fontSize: 9),
+                          color: Color(0xFF212121), fontSize: 9),
                     ),
                   ),
                 )
