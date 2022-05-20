@@ -102,6 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     date: message.sentAt,
                                     message: message.message,
                                     isMe: message.id == socket.id,
+                                    username: message.username,
                                   );
                                 }).toList()),
                           ],
@@ -178,12 +179,14 @@ class ChatBubble extends StatelessWidget {
   final bool isMe;
   final String message;
   final String date;
+  final String username;
 
   ChatBubble({
     Key key,
     this.message,
     this.isMe = true,
     this.date,
+    this.username,
   });
   @override
   Widget build(BuildContext context) {
@@ -196,6 +199,7 @@ class ChatBubble extends StatelessWidget {
         crossAxisAlignment:
         isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
+          Text(username),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             margin: const EdgeInsets.symmetric(vertical: 5.0),
