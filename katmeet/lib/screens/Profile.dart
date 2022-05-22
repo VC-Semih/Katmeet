@@ -102,17 +102,6 @@ class _Profile extends State<Profile> {
                 ),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(username:userModel.username )));
-              },
-              child: Text(
-                'chat', //title
-                textAlign: TextAlign.end,
-                style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
-                //aligment
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
               child: Text(userModel.username != null ? userModel.username : "",
