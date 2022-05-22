@@ -9,6 +9,7 @@ import 'package:katmeet/models/PhotosModel.dart';
 import 'package:katmeet/models/TypeAnimal.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/user_repository.dart';
+import 'package:katmeet/widget/refresh_widget.dart';
 import '../photo_repository.dart';
 import 'Animal/showAnimal.dart';
 import 'SideBar.dart';
@@ -24,6 +25,8 @@ class HomePage extends StatefulWidget {
 }
 class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final StorageService _storageService;
+  final keyRefresh = GlobalKey<RefreshIndicatorState>();
+
   UserModel userModel;
 
   double xOffset = 0;
@@ -57,7 +60,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         });
     loadAnimals();
   }
-  Future<void> loadAnimals(){
+  Future<void> loadAnimals() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    keyRefresh.currentState?.show();
     if(curentAnimalType == null){
       AnimalRepository.getAllAnimals().then((value) =>
       {
@@ -217,7 +222,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
               ),
             ),
-            Container(
+          RefreshWidget(onRefresh: loadAnimals,
+            child: Container(
               height: 500,
               child: _loading ? CircularProgressIndicator() :
               animalsModelList != null ?
@@ -304,7 +310,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   }
               ) : Text("You have no animals"),
 
-            ),
+            )),
             SizedBox(height: 100,),
           ],
         ),
