@@ -6,6 +6,7 @@ import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/screens/profile/editProfile.dart';
 import 'package:katmeet/user_repository.dart';
+import 'chat/dart.dart';
 import 'configuration.dart';
 import 'package:katmeet/auth_repository.dart';
 
