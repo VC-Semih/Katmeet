@@ -43,6 +43,7 @@ class AnimalShowsState extends State<AnimalShows> {
 
   UserModel userModel;
 
+
   @override
   Future<void> initState() {
     super.initState();
@@ -117,36 +118,24 @@ class AnimalShowsState extends State<AnimalShows> {
       body: _loading ? CircularProgressIndicator() : Stack(
         children:
         [
-          Positioned.fill(
-              child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  color: Colors.blueGrey[300],
-                  width: MediaQuery.of(context).size.width,
-                  child: _hasPhotos ?
-                  CachedNetworkImage(
-                    imageUrl:images.first,
-                    placeholder: (context, url) => Container(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator()),
-                  ) : null,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                ),
-              )
-            ],
-          )),
-          Align(
-            alignment: Alignment.topCenter,
-            child:
             SingleChildScrollView(
               child:
+
               Column(
                 children: <Widget>[
+                  Column(
+                    children: <Widget>[ Container(
+                      color: Colors.blueGrey[300],
+                      width: MediaQuery.of(context).size.width,
+                      child: _hasPhotos ?
+                      CachedNetworkImage(
+                        imageUrl:images.first,
+                        placeholder: (context, url) => Container(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator()),
+                      ) : null,
+                    )],
+                  ),
                   if(!_hasPhotos)...[
                   Container(
                     margin: EdgeInsets.only(top: 40),
@@ -155,10 +144,10 @@ class AnimalShowsState extends State<AnimalShows> {
                       child: Hero(
                           tag: id, child: _animalModel.type == TypeAnimal.CAT ?
                       Image.asset('assets/images/pet-cat2.png') :
-                      Padding(padding: const EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 110.0), child: Image.asset('assets/images/pet-dog.png'),)),
+                      Padding(padding: const EdgeInsets.fromLTRB(3.0, 3.0, 3.0, 3.0), child: Image.asset('assets/images/pet-dog.png'),)),
                     ),
                   )] else...[
-                    Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 400))
+                    Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0))
                   ],
                   if(isAnimalOwner) ...[
                   Center(
@@ -182,7 +171,8 @@ class AnimalShowsState extends State<AnimalShows> {
                         ),
                       ],
                     ),
-                  )],
+                  )]
+                  ,
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                     child: Text("Description " +  _animalModel.race != null ? _animalModel.race : "Hello ! I am using Katmeet",
@@ -212,7 +202,7 @@ class AnimalShowsState extends State<AnimalShows> {
                   ),
                   if (_hasPhotos) ...[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 15.0),
                       child: CarouselSlider(
                         options: CarouselOptions(autoPlay: true),
                         items: images.map((item) => Center(
@@ -225,10 +215,35 @@ class AnimalShowsState extends State<AnimalShows> {
                           ))).toList(),
                       ),
                     )],
+                  Center(
+                    child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: 60,
+                          width: 70,
+                          decoration: BoxDecoration(
+                              color: primaryGreen,
+                              borderRadius: BorderRadius.circular(20)),
+                          child:
+                          TextButton.icon(
+                            onPressed: () {
+                              // Respond to button press
+                            },
+                            icon: Icon(Icons.favorite_border,color: Colors.red,),
+                            label: Text("1",style: TextStyle(
+                              color: Colors.black,//for text color
+                            ),)
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
+
               ),
             ),
-          ),
+
         ],
       ),
     );
