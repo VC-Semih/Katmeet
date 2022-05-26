@@ -14,6 +14,7 @@ import 'package:katmeet/screens/Animal/edit.dart';
 
 import '../../auth_repository.dart';
 import '../../user_repository.dart';
+import '../Profile.dart';
 import '../configuration.dart';
 import 'crudAnimalPhoto.dart';
 
@@ -91,7 +92,8 @@ class AnimalShowsState extends State<AnimalShows> {
                   setState((){
                     isAnimalOwner = true;
                   })
-                }
+                },
+                print(value.animalOwner)
               })
         });
   }
@@ -171,8 +173,18 @@ class AnimalShowsState extends State<AnimalShows> {
                         ),
                       ],
                     ),
-                  )]
-                  ,
+                  )] else ...[
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          TextButton.icon(onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(userid: _animalModel.animalOwner)));
+                          }, icon: Icon(Icons.contact_page, size: 18,), label: Text("Uploader profile"))
+                        ],
+                      ),
+                    )
+                  ],
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                     child: Text("Description " +  _animalModel.race != null ? _animalModel.race : "Hello ! I am using Katmeet",

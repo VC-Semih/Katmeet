@@ -1,24 +1,31 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:katmeet/functions/storage_service.dart';
 import 'package:katmeet/models/UserModel.dart';
 import 'package:katmeet/screens/profile/editProfile.dart';
 import 'package:katmeet/user_repository.dart';
-import 'chat/dart.dart';
 import 'configuration.dart';
 import 'package:katmeet/auth_repository.dart';
 
 class Profile extends StatefulWidget {
+  final String userid;
+  Profile({Key, key, this.userid = ""}) : super(key: key);
+
   @override
-  _Profile createState() => _Profile(_storageService);
+  _Profile createState() => _Profile(_storageService, userid);
   final _storageService = new StorageService();
 }
 
 class _Profile extends State<Profile> {
+  String userid;
   UserModel userModel;
   bool _loading;
+  bool profileOwner = false;
   final StorageService _storageService;
 
   var theme1 = Colors.white;
@@ -27,54 +34,56 @@ class _Profile extends State<Profile> {
   var black = Colors.black;
   bool switchColor = false;
 
-  _Profile(this._storageService);
-
+  _Profile(this._storageService, this.userid);
   @override
   Future<void> initState() {
     super.initState();
     _loading = true;
-    AuthRepository.getEmailFromAttributes().then((email) => {
-          UserRepository.getUserByEmail(email).then((user) => {
-                setState(() {
-                  userModel = user;
-                  _loading = false;
-                  if(userModel.profilePictureS3Key != null) {
-                    _storageService.getImageByS3Key(userModel.profilePictureS3Key);
-                  }
-                })
-              })
-        });
-
-
+    if(userid == "") {
+      profileOwner = true;
+      AuthRepository.getEmailFromAttributes().then((email) =>
+      {
+        UserRepository.getUserByEmail(email).then((user) =>
+        {
+          setState(() {
+            userModel = user;
+            _loading = false;
+            if (userModel.profilePictureS3Key != null) {
+              _storageService.getImageByS3Key(userModel.profilePictureS3Key);
+            }
+          })
+        })
+      });
+    }else {
+      UserRepository.getUserById(userid).then((user) =>
+      {
+        setState(() {
+          userModel = user;
+          _loading = false;
+          if (userModel.profilePictureS3Key != null) {
+            _storageService.getImageByS3Key(userModel.profilePictureS3Key);
+          }
+        })
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    TextStyle defaultStyle = TextStyle(color: primaryGreen, fontSize: 13.0, fontWeight: FontWeight.bold);
+    TextStyle linkStyle = TextStyle(color: Colors.blue, fontSize: 15);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: theme1,
         elevation: 0.0,
-        leading: Icon(
-          Icons.arrow_back,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
           color: black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.favorite_border,
-              color: black,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 8.0, 12.0, 8.0),
-            child: Icon(
-              Icons.more_vert,
-              color: black,
-            ),
-          ),
-        ],
       ),
       body:
       SingleChildScrollView(
@@ -115,28 +124,24 @@ class _Profile extends State<Profile> {
               padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
               child: Text(userModel.email,
                   textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: primaryGreen,
-                      fontSize: 13.0,
-                      fontWeight: FontWeight.bold)),
+                  style: defaultStyle),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
-              child: Text(userModel.phoneNumber != null ? userModel.phoneNumber : "",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: primaryGreen,
-                      fontSize: 13.0,
-                      fontWeight: FontWeight.bold)),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                 Text(userModel.phoneNumber != null ? userModel.phoneNumber : "", textAlign: TextAlign.left, style: defaultStyle),
+                if(userModel.phoneNumber != null) ...[
+                  TextButton(onPressed: () => {
+                    UrlLauncher.launch("tel://${userModel.phoneNumber}"),
+                  }, child: IconButton(icon: Icon(Icons.call),))],
+              ],
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 4.0),
               child: Text(userModel.adress != null ? userModel.adress : "",
                   textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: primaryGreen,
-                      fontSize: 13.0,
-                      fontWeight: FontWeight.bold)),
+                  style: defaultStyle),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(40.0, 8.0, 40.0, 0.0),
@@ -274,15 +279,7 @@ class _Profile extends State<Profile> {
                 height: 120,
                 child: Row(
                   children: [
-                    Container(
-                      height: 60,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          color: primaryGreen,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Icon(Icons.favorite_border,color: Colors.white,),
-                    ),
-                    SizedBox(width: 10,),
+                    if(profileOwner) ...[
                     Expanded(
                       child: Container(
                         height: 60,
@@ -294,7 +291,7 @@ class _Profile extends State<Profile> {
                           child: Center(child: Text('Edit',style: TextStyle(color: Colors.white,fontSize: 24),)),
                         ),
                       ),
-                    )
+                    )]
                   ],
                 )
                 ,
