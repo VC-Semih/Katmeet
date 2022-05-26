@@ -156,7 +156,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       }),
                   Column(
                     children: [
-                      _loading ? CircularProgressIndicator() : Text(userModel.username),
+                      _loading ? CircularProgressIndicator() : Text(userModel.username != null ? userModel.username : "loading..."),
                       Row(
                         children: [
                           Icon(
