@@ -49,6 +49,7 @@ class SignInState extends State<SignIn> {
           username: username,
           email: email
       );
+      delay
     } on AuthException catch (e) {
       print(e.message);
       Scaffold.of(context).hideCurrentSnackBar();

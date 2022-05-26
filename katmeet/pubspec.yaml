@@ -77,6 +77,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/kat.png
   fonts:
     - family: Circular
       fonts:
