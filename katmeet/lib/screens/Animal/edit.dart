@@ -1,3 +1,4 @@
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -39,7 +40,7 @@ class _FormAnimal extends State<FormAnimal>  {
         id: currentAnimal.id,
         type: _animalType,
         race: _race.text,
-        birthdate: currentDate,
+        birthdate: TemporalDateTime(currentDate),
         description: _description.text,
       );
       AnimalRepository.updateAnimal(Animal);
@@ -55,7 +56,7 @@ class _FormAnimal extends State<FormAnimal>  {
           currentAnimal = animal;
           _race.text = currentAnimal.race;
           _description.text = currentAnimal.description;
-           currentDate = currentAnimal.birthdate;
+           currentDate = currentAnimal.birthdate.getDateTimeInUtc();
            _animalType = currentAnimal.type;
         }),
       print(animal),

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:katmeet/models/AnimalModel.dart';
 import 'package:katmeet/models/ModelProvider.dart';
@@ -20,7 +21,7 @@ class AnimalRepository {
       {TypeAnimal type,
       String race,
       String description,
-      DateTime birthdate,
+      TemporalDateTime birthdate,
       String animalOwnerId}) async {
     final newAnimal = new AnimalModel(
         type: type,

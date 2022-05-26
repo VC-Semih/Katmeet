@@ -196,7 +196,7 @@ class AnimalShowsState extends State<AnimalShows> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
-                    child: Text(outputFormat.format(_animalModel.birthdate),
+                    child: Text(outputFormat.format(DateTime.parse(_animalModel.birthdate.toString())),
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: primaryGreen,

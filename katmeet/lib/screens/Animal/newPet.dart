@@ -1,3 +1,4 @@
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -206,7 +207,7 @@ class NewPetState extends State<NewPet> {
                                     type: _animalType,
                                     race: _race.text,
                                     description: _description.text,
-                                    birthdate: currentDate,
+                                    birthdate: TemporalDateTime(currentDate),
                                     animalOwnerId: userModel.id,
                                   ).then((value) => {
                                         ScaffoldMessenger.of(context)

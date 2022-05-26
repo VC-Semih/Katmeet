@@ -1,5 +1,5 @@
 /*
-* Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+* Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License").
 * You may not use this file except in compliance with the License.
@@ -13,6 +13,12 @@
 * permissions and limitations under the License.
 */
 
+// NOTE: This file is generated and may not follow lint rules defined in your app
+// Generated files can be excluded from analysis in analysis_options.yaml
+// For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
+
+// ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
+
 import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +26,7 @@ import 'package:flutter/foundation.dart';
 /** This is an auto generated class representing the UserModelAnimalModel type in your schema. */
 @immutable
 class UserModelAnimalModel extends Model {
-  static const classType = const UserModelAnimalModelType();
+  static const classType = const _UserModelAnimalModelModelType();
   final String id;
   final AnimalModel animalmodel;
   final UserModel usermodel;
@@ -39,7 +45,7 @@ class UserModelAnimalModel extends Model {
       @required this.usermodel});
 
   factory UserModelAnimalModel(
-      {@required String id,
+      {String id,
       @required AnimalModel animalmodel,
       @required UserModel usermodel}) {
     return UserModelAnimalModel._internal(
@@ -69,7 +75,7 @@ class UserModelAnimalModel extends Model {
     var buffer = new StringBuffer();
 
     buffer.write("UserModelAnimalModel {");
-    buffer.write("id=" + id + ", ");
+    buffer.write("id=" + "$id" + ", ");
     buffer.write("animalmodel=" +
         (animalmodel != null ? animalmodel.toString() : "null") +
         ", ");
@@ -81,9 +87,7 @@ class UserModelAnimalModel extends Model {
   }
 
   UserModelAnimalModel copyWith(
-      {@required String id,
-      @required AnimalModel animalmodel,
-      @required UserModel usermodel}) {
+      {String id, AnimalModel animalmodel, UserModel usermodel}) {
     return UserModelAnimalModel(
         id: id ?? this.id,
         animalmodel: animalmodel ?? this.animalmodel,
@@ -152,8 +156,8 @@ class UserModelAnimalModel extends Model {
   });
 }
 
-class UserModelAnimalModelType extends ModelType<UserModelAnimalModel> {
-  const UserModelAnimalModelType();
+class _UserModelAnimalModelModelType extends ModelType<UserModelAnimalModel> {
+  const _UserModelAnimalModelModelType();
 
   @override
   UserModelAnimalModel fromJson(Map<String, dynamic> jsonData) {
